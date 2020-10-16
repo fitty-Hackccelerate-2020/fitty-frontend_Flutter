@@ -107,6 +107,7 @@ class AuthProvider with ChangeNotifier {
         'status' : true,
         'user': registeredUser
       };
+      await UserPreferences().saveUser(registeredUser);
       notifyListeners();
     }
     else{
