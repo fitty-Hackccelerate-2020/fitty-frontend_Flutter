@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
             return LoginPage();
           }
           // Navigator.pop(context);
-          return DashBoardPage();
+          return NavigationPage();
         }
         return CircularProgressIndicator();
       },
