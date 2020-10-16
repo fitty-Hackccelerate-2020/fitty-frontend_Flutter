@@ -1,4 +1,5 @@
 import 'package:fitty/Page/AuthPage/signup.dart';
+import 'package:fitty/Page/detailsPage.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -71,7 +72,7 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
             ),
-            _submitButton(),
+            _submitButton(context),
             Center(
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 30),
@@ -99,13 +100,18 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  _submitButton(){
+  _submitButton(context){
     return Center(
       child: RaisedButton(
         color: Colors.blue[200],
         shape: StadiumBorder(),
         onPressed: (){
           /// seperate flow for APIs....
+          /// final Future<Map<String, dynamic>> successfulMessage =
+          //            auth.login(_username, _password);
+          Navigator.push(context, MaterialPageRoute(builder:
+              (context) => DetailsPage()));
+
         },
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
