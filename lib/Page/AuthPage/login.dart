@@ -1,8 +1,19 @@
+import 'dart:convert';
+
 import 'package:fitty/Page/AuthPage/signup.dart';
+import 'package:fitty/Page/Dashboard/dashboard.dart';
+import 'package:fitty/services/auth.dart';
+import 'package:fitty/services/user_provider.dart';
+import 'package:fitty/utils/AppUrl.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
   var width, height;
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +66,7 @@ class LoginPage extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
               child: TextFormField(
+                controller: email,
                 decoration: InputDecoration(
                   hintText: 'Email',
                   border: OutlineInputBorder(borderSide: BorderSide())
@@ -65,13 +77,14 @@ class LoginPage extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(20, 0, 20, 30),
               // padding: EdgeInsets.all(10),
               child: TextFormField(
+                controller: password,
                 decoration: InputDecoration(
                   hintText: 'Password',
                   border: OutlineInputBorder(borderSide: BorderSide())
                 ),
               ),
             ),
-            _submitButton(),
+            _submitButton(context),
             Center(
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 30),
@@ -99,19 +112,54 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  _submitButton(){
+  _submitButton(BuildContext context){
     return Center(
       child: RaisedButton(
         color: Colors.blue[200],
         shape: StadiumBorder(),
-        onPressed: (){
+        onPressed:() => _loginRequest(context),
           /// seperate flow for APIs....
-        },
+
+          // var cred = jsonEncode({'email':'mayursiinh@gmail.com','password': 'fo'});
+          // const headers = {
+          //   'Content-Type': 'application/json; charset=UTF-8',
+          //   'x-request-with': 'XMLHttpRequest'
+          // };
+          // try {
+          //   String proxy = "https://cors-anywhere.herokuapp.com/";
+          // var x  = await http.post( 'http://192.168.1.106:3000/auth/login', headers: headers, body: cred);
+          // print('1');
+          // print('Response status: ${x.statusCode}');
+          // print(x.body);
+          // }
+          // catch(e){
+          //   print(e.toString());
+          // }
+        // },
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
           child: Text('Login', style: TextStyle(color: Colors.white)),
         ),
       ),
     );
+  }
+
+  _loginRequest(BuildContext context) async{
+    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+    Map<String, dynamic> response = await authProvider.login(email.text, password.text);
+    if(response == null){
+      authProvider.logOut();
+      print("error");
+    }
+    if(authProvider.authStatus == Status.LoggedIn && response['status']){
+      Navigator.push(context, MaterialPageRoute(builder:
+        (context) => DashBoardPage()));
+      print('login success');
+    }
+    else{
+      print(authProvider.authStatus);
+      print(response['message']);
+    }
+    print("exit");
   }
 }

@@ -1,0 +1,39 @@
+import 'dart:math';
+
+import 'package:fitty/Page/AuthPage/login.dart';
+import 'package:fitty/Page/Dashboard/dashboard.dart';
+import 'package:fitty/models/user.dart';
+import 'package:fitty/utils/shared_preference.dart';
+import 'package:flutter/material.dart';
+
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: UserPreferences().getUser(),
+      builder: (BuildContext context, AsyncSnapshot snapshot){
+        if(snapshot.connectionState == ConnectionState.waiting)
+          return CircularProgressIndicator();
+        else if(snapshot.connectionState == ConnectionState.done){
+          User loggedInUser = snapshot.data;
+          print(loggedInUser.token);
+          // print(loggedInUser.token);
+          if(loggedInUser.token == null){
+            print('not loggedIn');
+            // Navigator.pop(context);
+            return LoginPage();
+          }
+          // Navigator.pop(context);
+          return DashBoardPage();
+        }
+        return CircularProgressIndicator();
+      },
+    );
+  }
+}

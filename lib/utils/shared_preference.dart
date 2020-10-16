@@ -32,7 +32,6 @@ class UserPreferences {
 //    String renewalToken = prefs.getString("renewalToken");
 
     return User(
-
         token: token,
         );
   }
