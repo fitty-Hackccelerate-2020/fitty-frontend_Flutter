@@ -6,6 +6,7 @@ class DetailsPage extends StatefulWidget {
   _DetailsPageState createState() => _DetailsPageState();
 }
 var _genderselect=0;
+
 class _DetailsPageState extends State<DetailsPage> {
   final _formkey = GlobalKey<FormState>();
 
