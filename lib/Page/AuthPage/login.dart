@@ -151,7 +151,7 @@ class LoginPage extends StatelessWidget {
       authProvider.logOut();
       print("error");
     }
-    if(authProvider.authStatus == Status.LoggedIn && response['status']){
+    else if(authProvider.authStatus == Status.LoggedIn && response['status']){
       Navigator.push(context, MaterialPageRoute(builder:
         (context) => DashBoardPage()));
       print('login success');

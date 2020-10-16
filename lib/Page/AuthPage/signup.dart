@@ -125,13 +125,13 @@ class SignUpPage extends StatelessWidget {
         shape: StadiumBorder(),
         onPressed: ()async{
           /// separate flow for APIs...
-          UserPreferences userPreferences = UserPreferences();
-          // userPreferences.getUser();
-          // UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-          User u = await userPreferences.getUser();
-          print(u.token);
-          userPreferences.removeUser();
-          // _registerRequest(context);
+          // UserPreferences userPreferences = UserPreferences();
+          // // userPreferences.getUser();
+          // // UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+          // User u = await userPreferences.getUser();
+          // print(u.token);
+          // userPreferences.removeUser();
+          _registerRequest(context);
         },
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),

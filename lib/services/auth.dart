@@ -31,7 +31,7 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> login(String email, String password) async {
-    var result;
+    Map<String, dynamic> result;
     _loggedInStatus = Status.NotLoggedIn;
     final Map<String, dynamic> loginData = {
         'email': email,
@@ -66,13 +66,14 @@ class AuthProvider with ChangeNotifier {
     if (response.statusCode == 200) {
 
       User authUser = User.fromJson(responseData);
-      UserPreferences().saveUser(authUser);
+      await UserPreferences().saveUser(authUser);
       _loggedInStatus = Status.LoggedIn;
-
+      notifyListeners();
       result = {
         'status': true,
         'user': authUser
       };
+      return result;
       // notifyListeners();
     } else {
       _loggedInStatus = Status.NotLoggedIn;
