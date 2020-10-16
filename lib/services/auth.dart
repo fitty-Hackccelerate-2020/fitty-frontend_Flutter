@@ -13,7 +13,6 @@ enum Status {
   NotLoggedIn,
   NotRegistered,
   LoggedIn,
-  Registered,
   Authenticating,
   Registering,
   LoggedOut
@@ -24,101 +23,106 @@ class AuthProvider with ChangeNotifier {
   Status _loggedInStatus = Status.NotLoggedIn;
   Status _registeredInStatus = Status.NotRegistered;
 
-  Status get loggedInStatus => _loggedInStatus;
+  Status get authStatus => _loggedInStatus;
   Status get registeredInStatus => _registeredInStatus;
 
+  Status set(Status status){
+    _loggedInStatus = status;
+  }
 
   Future<Map<String, dynamic>> login(String email, String password) async {
-    var result;
-
+    Map<String, dynamic> result;
+    _loggedInStatus = Status.NotLoggedIn;
     final Map<String, dynamic> loginData = {
-      'user': {
         'email': email,
         'password': password
-      }
     };
 
-    _loggedInStatus = Status.Authenticating;
-    notifyListeners();
+    // _loggedInStatus = Status.Authenticating;
+    // notifyListeners();
 
-    Response response = await post(
-      AppUrl.login,
-      body: json.encode(loginData),
-      headers: {'Content-Type': 'application/json'},
-    );
+    Response response;
+    try{
+      response = await post(
+        AppUrl.login,
+        body: jsonEncode(loginData),
+        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+      );
+    }
+    catch(e){
+      print("error_login");
+      print(e.toString());
+      _loggedInStatus = Status.NotLoggedIn;
+      // notifyListeners();
+      result = {
+        'status': false,
+        'message': 'something went wrong',
+      };
+      return result;
+    }
+    // result['status'] = false;
 
+    final Map<String, dynamic> responseData = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
 
-      var userData = responseData['data'];
-
-      User authUser = User.fromJson(userData);
-
-      UserPreferences().saveUser(authUser);
-
+      User authUser = User.fromJson(responseData);
+      await UserPreferences().saveUser(authUser);
       _loggedInStatus = Status.LoggedIn;
       notifyListeners();
-
-      result = {'status': true, 'message': 'Successful', 'user': authUser};
-    } else {
-      _loggedInStatus = Status.NotLoggedIn;
-      notifyListeners();
-      result = {
-        'status': false,
-        'message': json.decode(response.body)['error']
-      };
-    }
-    return result;
-  }
-
-  Future<Map<String, dynamic>> register(String email, String password, String passwordConfirmation) async {
-
-    final Map<String, dynamic> registrationData = {
-      'user': {
-        'email': email,
-        'password': password,
-        'password_confirmation': passwordConfirmation
-      }
-    };
-    return await post(AppUrl.register,
-        body: json.encode(registrationData),
-        headers: {'Content-Type': 'application/json'})
-        .then(onValue)
-        .catchError(onError);
-  }
-
-  static Future<FutureOr> onValue(Response response) async {
-    var result;
-    final Map<String, dynamic> responseData = json.decode(response.body);
-
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-
-      var userData = responseData['data'];
-
-      User authUser = User.fromJson(userData);
-
-      UserPreferences().saveUser(authUser);
       result = {
         'status': true,
-        'message': 'Successfully registered',
-        'data': authUser
+        'user': authUser
       };
+      return result;
+      // notifyListeners();
     } else {
-//      if (response.statusCode == 401) Get.toNamed("/login");
+      _loggedInStatus = Status.NotLoggedIn;
+      // notifyListeners();
       result = {
         'status': false,
-        'message': 'Registration failed',
-        'data': responseData
+        'message': responseData['data'],
       };
+      notifyListeners();
+      return result;
     }
+  }
 
+  Future<Map<String, dynamic>> register(String email, String password, String fullName) async {
+
+    Map<String, dynamic> result;
+    final Map<String, dynamic> registrationData = {
+        'email': email,
+        'password': password,
+        'full_name': fullName
+    };
+    Response response =  await post(AppUrl.register,
+        body: jsonEncode(registrationData),
+        headers: {'Content-Type': 'application/json; charset=UTF-8'});
+
+    Map<String, dynamic> responseData = jsonDecode(response.body);
+    if(response.statusCode == 200){
+      User registeredUser = User.fromJson(responseData);
+      _loggedInStatus = Status.LoggedIn;
+      result = {
+        'status' : true,
+        'user': registeredUser
+      };
+      await UserPreferences().saveUser(registeredUser);
+      notifyListeners();
+    }
+    else{
+      result = {
+        'status': false,
+        'message': responseData['data']
+      };
+      _loggedInStatus = Status.NotLoggedIn;
+      notifyListeners();
+    }
     return result;
   }
 
-  static onError(error) {
-    print("the error is $error.detail");
-    return {'status': false, 'message': 'Unsuccessful Request', 'data': error};
+  Future<void> logOut(){
+    _loggedInStatus = Status.NotLoggedIn;
   }
 
 }

@@ -14,7 +14,7 @@ class UserPreferences {
     prefs.setString("token", user.token);
 //    prefs.setString("renewalToken", user.renewalToken);
 
-    print("object prefere");
+    print("object preference");
 //    print(user.renewalToken);
 
     return prefs.commit();
@@ -32,7 +32,6 @@ class UserPreferences {
 //    String renewalToken = prefs.getString("renewalToken");
 
     return User(
-
         token: token,
         );
   }
