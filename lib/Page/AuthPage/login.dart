@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'package:fitty/Page/AuthPage/signup.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 
 class LoginPage extends StatelessWidget {
   var width, height;
@@ -17,7 +16,7 @@ class LoginPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             _preSet(),
-            _formLogin(),
+            _formLogin(context),
           ],
         ),
       ),
@@ -39,7 +38,7 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  _formLogin(){
+  _formLogin(BuildContext context){
     return Container(
       height: height - height / 2,
       decoration: BoxDecoration(
@@ -81,6 +80,10 @@ class LoginPage extends StatelessWidget {
                   children: <Widget>[
                     Text("Don't have an account ? "),
                     InkWell(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder:
+                            (context) => SignUpPage()));
+                      },
                       child: Container(
                         child: Text('Sign Up',
                             style: TextStyle(color: Colors.blue[200], fontWeight: FontWeight.bold))
