@@ -4,8 +4,9 @@ class User {
   User({this.token});
 
   factory User.fromJson(Map<String, dynamic> responseData) {
+    print(" ff ${responseData['data']}");
     return User(
-      token: responseData['access_token'],
+      token: responseData['data'],
     );
   }
 }
