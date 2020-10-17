@@ -90,9 +90,7 @@ class ProfilePage extends StatelessWidget {
         leading: Icon(Icons.power_settings_new, color: Colors.red),
         title: Text('Logout',),
         // subtitle: Text('Height, Weight, Age, Gender, Activity-level'),
-        onTap: () {
-          _logoutAction(context);
-        }
+        onTap: _logoutAction(context)
       ),
     );
   }
@@ -105,7 +103,4 @@ class ProfilePage extends StatelessWidget {
     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:
         (context) => LoginPage()), (route) => false);
   }
-
 }
-
-
