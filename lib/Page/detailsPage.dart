@@ -1,5 +1,8 @@
 import 'package:fitty/Page/SetGoal.dart';
+import 'package:fitty/models/user.dart';
+import 'package:fitty/services/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DetailsPage extends StatefulWidget {
   @override
@@ -12,6 +15,10 @@ class _DetailsPageState extends State<DetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    User registeredUser = userProvider.user;
+
+    print(registeredUser.token);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,

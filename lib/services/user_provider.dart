@@ -9,6 +9,11 @@ class UserProvider with ChangeNotifier {
 
   void setUser(User user) {
     _user = user;
+    // notifyListeners();
+  }
+
+  void removeUser(User user){
+    _user = null;
     notifyListeners();
   }
 
