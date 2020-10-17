@@ -44,7 +44,7 @@ class AuthProvider with ChangeNotifier {
     Response response;
     try{
       response = await post(
-        AppUrl.login,
+        AppUrl.login ,
         body: jsonEncode(loginData),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},
       );

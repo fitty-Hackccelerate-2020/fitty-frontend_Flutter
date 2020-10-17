@@ -1,9 +1,9 @@
 class AppUrl {
-  static const String liveBaseURL = "";
+  static const String liveBaseURL = "https://whispering-tor-28801.herokuapp.com/";
   static const String localBaseURL = "http://192.168.1.106:3000/";
 
   static const String baseURL = localBaseURL;
-  static const String login = baseURL + "auth/login";
-  static const String register = baseURL + "auth/register";
-  static const String forgotPassword = baseURL + "/forgot-password";
+  static const String login = liveBaseURL + "auth/login";
+  static const String register = liveBaseURL + "auth/register";
+  static const String forgotPassword = liveBaseURL + "/forgot-password";
 }
