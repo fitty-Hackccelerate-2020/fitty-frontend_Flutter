@@ -1,5 +1,6 @@
 import 'package:fitty/Page/AuthPage/signup.dart';
 import 'package:fitty/Page/Dashboard/dashboard.dart';
+import 'package:fitty/Page/Dashboard/initializeDashboard.dart';
 import 'package:fitty/models/user.dart';
 import 'package:fitty/services/auth.dart';
 import 'package:fitty/services/user_provider.dart';
@@ -154,8 +155,7 @@ class LoginPage extends StatelessWidget {
       /// user is saved to provider after login successfully....
       UserProvider userProvider =  Provider.of<UserProvider>(context, listen: false);
       userProvider.setUser(loggedInUser);
-      Navigator.push(context, MaterialPageRoute(builder:
-        (context) => NavigationPage()));
+      return InitalizeDashboard();
       print('login success');
     }
     else{
