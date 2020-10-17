@@ -1,3 +1,6 @@
+import 'package:fitty/models/user.dart';
+import 'package:fitty/services/user_provider.dart';
+
 import '../../Page/Dashboard/DrinkingDeatils.dart';
 import '../../Page/Profile/profile.dart';
 import 'package:flutter/material.dart';
@@ -61,11 +64,15 @@ class _NavigationPageState extends State<NavigationPage> {
 }
 
 class DashBoardPage extends StatelessWidget {
+  User user;
   var width, height;
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
+    user = Provider.of<UserProvider>(context, listen: false).user;
+    // print(user.dailyData.caloriesToConsume);
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -89,7 +96,7 @@ class DashBoardPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Image.asset('assets/avatar-man.png'),
-              Text("Hello, userName", style: TextStyle(fontSize: 20)),
+              Text("Hello, ${user.fullName}", style: TextStyle(fontSize: 20)),
 //              Icon(Icons.pie_chart)
             _rewardsButton(context)
             ],
@@ -118,23 +125,38 @@ class DashBoardPage extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(10),
       child: Card(
-        color: Colors.blue,
+        // color: Colors.blue,
         child: Container(
           // margin: EdgeInsets.all(10),
           // color: Colors.pinkAccent,
           // padding: EdgeInsets.all(20),
           height: height / 4,
           child: Row(
+            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            // crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Column(
-                children: <Widget>[
-
-                ],
+              Container(
+                width: width / 2 - 15,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      child: Text("Consumed calories : ")
+                    )
+                  ],
+                ),
               ),
-              Column(
-                children: <Widget>[
+              Container(
+                color: Colors.grey,
+                width: 2,
+                height: height/4 - 30,
+              ),
+              Container(
+                width: width / 2 - 15,
+                child: Column(
+                  children: <Widget>[
 
-                ],
+                  ],
+                ),
               )
             ],
           ),
@@ -159,7 +181,7 @@ class DashBoardPage extends StatelessWidget {
   _drinkingCard(BuildContext context){
     return InkWell(
       onTap: () {
-        DrinkingDetails(context).openEditingSheet();
+        DrinkingDetails(context, user.waterData).openEditingSheet();
       },
       child: Card(
         color: Colors.blue[100],

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:fitty/Page/AuthPage/signup.dart';
 import 'package:fitty/Page/Dashboard/dashboard.dart';
 import 'package:fitty/Page/Dashboard/initializeDashboard.dart';
@@ -9,7 +7,6 @@ import 'package:fitty/services/user_provider.dart';
 import 'package:fitty/utils/AppUrl.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:dio/dio.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
@@ -158,7 +155,9 @@ class LoginPage extends StatelessWidget {
       /// user is saved to provider after login successfully....
       UserProvider userProvider =  Provider.of<UserProvider>(context, listen: false);
       userProvider.setUser(loggedInUser);
-      return InitalizeDashboard();
+      Navigator.push(context, MaterialPageRoute(builder:
+        (context) => InitalizeDashboard()
+      ));
       print('login success');
     }
     else{
