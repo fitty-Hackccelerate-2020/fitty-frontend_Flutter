@@ -1,4 +1,5 @@
 import 'package:fitty/Page/AuthPage/login.dart';
+import 'package:fitty/Page/Profile/profile.dart';
 import 'package:fitty/services/auth.dart';
 import 'package:fitty/utils/shared_preference.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class _NavigationPageState extends State<NavigationPage> {
   List<Widget> _navList = [
     DashBoardPage(),
     Text("History Page"),
-    Text("Profile Page")
+    ProfilePage()
   ];
 
   void _onItemTapped(int i) {
