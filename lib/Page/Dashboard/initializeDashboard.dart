@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:fitty/models/basicDataModel.dart';
+import 'package:fitty/models/healthDataModel.dart';
 import 'package:fitty/models/user.dart';
+import 'package:fitty/models/waterModel.dart';
 import 'package:fitty/services/user_provider.dart';
 import 'package:fitty/utils/AppUrl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -20,18 +23,18 @@ class _InitalizeDashboardState extends State<InitalizeDashboard> {
 
   @override
   void initState() {
-    user = Provider.of<UserProvider>(context, listen: false).user;
     // TODO: implement initState
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    user = Provider.of<UserProvider>(context, listen: false).user;
     return Scaffold(
       body: FutureBuilder(
         future: GetInitialData(),
         builder: (context, snapshot) {
-          if(snapshot.data==ConnectionState.waiting||snapshot.data==ConnectionState.none)
+          if(snapshot.connectionState==ConnectionState.waiting||snapshot.connectionState==ConnectionState.none)
             {
               return Container(
                 child: Center(
@@ -39,10 +42,12 @@ class _InitalizeDashboardState extends State<InitalizeDashboard> {
                 ),
               );
             }
-            else
+            else if(snapshot.connectionState == ConnectionState.done)
               {
                return NavigationPage();
               }
+            else
+              return CircularProgressIndicator();
         },
       ),
     );
@@ -62,18 +67,29 @@ class _InitalizeDashboardState extends State<InitalizeDashboard> {
         headers: {'Content-Type': 'application/json; charset=UTF-8'});
 
     print(response.statusCode);
-    var responseData = json.decode(response.body);
+
+    Map<String, dynamic> responseData = jsonDecode(response.body);
     print(responseData);
+    print(responseData['data']);
+    print("hi");
+    print(responseData['data']['diet']['foodName']);
+    print("hid");
     user.dailyData.caloriesToConsume=responseData['data']['caloriesToConsume'];
     user.dailyData.caloriesConsumed=responseData['data']['caloriesConsumed'];
     user.dailyData.drankWater=responseData['data']['drankWater'];
-    user.diet.foodName=responseData['data']['diet']['foodname'];
+    print("hi");
+    user.diet.foodName=responseData['data']['diet']['foodName'];
     user.diet.caloriesGot=responseData['data']['died']['caloriesGot'];
-    user.diet.quantity=responseData['data']['died']['quantity'];
+    user.diet.quantity=responseData['data']['diet']['quantity'];
     user.sleep.wokeupAt=responseData['data']['sleep']['wokeupAt'];
     user.sleep.sleepAt=responseData['data']['sleep']['sleepAt'];
     user.workOut.caloriesBurnt=responseData['data']['workout']['caloriesBurnt'];
     user.workOut.workoutName=responseData['data']['workout']['workoutName'];
+    user.healthData = HealthData();
+    user.waterData = WaterData(current: 0, target: 10);
+    user.basicData = BasicData();
+    print("updated");
+    print(responseData['data']['caloriesConsumed']);
     if(responseData['error']==false||response.statusCode!=200)
       {
         Fluttertoast.showToast(msg: "Something Went Wrong");

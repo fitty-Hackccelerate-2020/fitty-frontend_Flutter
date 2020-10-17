@@ -1,3 +1,4 @@
+import 'package:fitty/models/waterModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/user.dart';
@@ -5,23 +6,24 @@ import '../../services/user_provider.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class DrinkingDetails {
-  int target;
-  int current;
   int newTarget;
+  static int target;
+  static int current;
+  WaterData waterData;
   BuildContext context;
   List<charts.Series> seriesList;
 
-  DrinkingDetails(this.context){
+  DrinkingDetails(this.context, this.waterData){
     /// only user Access from Provider....
     User user = Provider.of<UserProvider>(context, listen: false).user;
-    current = user.waterData.current;
-    target = user.waterData.target;
+    current = waterData.current ?? 0;
+    target = waterData.target ?? 10;
     newTarget = current??0;
 
   }
   static List<charts.Series<GaugeSegment, String>> _createSampleData() {
     final data = [
-      new GaugeSegment('Low', 90),
+      new GaugeSegment('Low', current/target * 100 ),
       // new GaugeSegment('Acceptable', 100),
       // new GaugeSegment('High', 100),
       // new GaugeSegment('Highly Unusual', 5),
@@ -207,7 +209,7 @@ class GaugeChart extends StatelessWidget {
 class GaugeSegment {
 
   final String segment;
-  final int size;
+  final double size;
   final charts.Color color = charts.Color(r: 104, g: 240, b: 174);
 
   GaugeSegment(this.segment, this.size);

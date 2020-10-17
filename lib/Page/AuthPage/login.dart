@@ -155,7 +155,9 @@ class LoginPage extends StatelessWidget {
       /// user is saved to provider after login successfully....
       UserProvider userProvider =  Provider.of<UserProvider>(context, listen: false);
       userProvider.setUser(loggedInUser);
-      return InitalizeDashboard();
+      Navigator.push(context, MaterialPageRoute(builder:
+        (context) => InitalizeDashboard()
+      ));
       print('login success');
     }
     else{
