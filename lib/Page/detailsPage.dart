@@ -1,16 +1,30 @@
+import 'dart:convert';
+
 import 'package:fitty/Page/SetGoal.dart';
 import 'package:fitty/services/user_provider.dart';
+import 'package:fitty/utils/AppUrl.dart';
 import 'package:flutter/material.dart';
 import 'package:fitty/models/user.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
+
 class DetailsPage extends StatefulWidget {
   @override
   _DetailsPageState createState() => _DetailsPageState();
 }
-var _genderselect=0;
+
+var _genderselect = -1;
 
 class _DetailsPageState extends State<DetailsPage> {
   final _formkey = GlobalKey<FormState>();
+  var _nameController = TextEditingController();
+  var _ageController = TextEditingController();
+  var _heightController = TextEditingController();
+  var _weightController = TextEditingController();
+  static String SelectActivity = "Select Activity";
+  ValueNotifier<String> activityVal = ValueNotifier(SelectActivity);
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +32,7 @@ class _DetailsPageState extends State<DetailsPage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black54),
+        automaticallyImplyLeading: false,
         title: Text(
           "Basic Info",
           style: TextStyle(
@@ -51,6 +66,7 @@ class _DetailsPageState extends State<DetailsPage> {
       body: GetGenralInfoData(context, _formkey),
     );
   }
+
   GetGenralInfoData(context, _formkey) {
     return Form(
       key: _formkey,
@@ -71,6 +87,14 @@ class _DetailsPageState extends State<DetailsPage> {
                       ),
                     ),
                     title: TextFormField(
+                      controller: _nameController,
+                      keyboardType: TextInputType.text,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return "Enter Name";
+                        }
+                        return null;
+                      },
                       decoration: InputDecoration(
                           hintText: 'Name',
                           border: OutlineInputBorder(
@@ -93,60 +117,61 @@ class _DetailsPageState extends State<DetailsPage> {
                         width: 40,
                       ),
                     ),
-                    title:Row(
+                    title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Expanded(
                           flex: 1,
                           child: InkWell(
-                            onTap: (){
-                              _genderselect=0;
-                              setState(() {
-
-                              });
-
+                            onTap: () {
+                              _genderselect = 0;
+                              setState(() {});
                             },
                             child: Container(
-                              child: Center(child: Text("Male",style: TextStyle(color: Colors.white70),)),
+                              child: Center(
+                                  child: Text(
+                                "Male",
+                                style: TextStyle(color: Colors.white70),
+                              )),
                               decoration: BoxDecoration(
-                                  color: _genderselect==0?Colors.lightGreen:Colors.grey,
+                                  color: _genderselect == 0
+                                      ? Colors.lightGreen
+                                      : Colors.grey,
                                   borderRadius: BorderRadius.only(
                                       topRight: Radius.circular(8),
-                                      bottomLeft: Radius.circular(8)
-                                  )
-                              ),
-
+                                      bottomLeft: Radius.circular(8))),
                               height: 90,
                             ),
                           ),
                         ),
-                        Padding(padding: EdgeInsets.all(5),),
+                        Padding(
+                          padding: EdgeInsets.all(5),
+                        ),
                         Expanded(
                           flex: 1,
-                          child:InkWell(
-                            onTap: (){
-                              _genderselect=1;
-                              setState(() {
-
-                              });
+                          child: InkWell(
+                            onTap: () {
+                              _genderselect = 1;
+                              setState(() {});
                             },
                             child: Container(
                               child: Center(
-                                child: Text("Women",style: TextStyle(color: Colors.white70),),
+                                child: Text(
+                                  "Women",
+                                  style: TextStyle(color: Colors.white70),
+                                ),
                               ),
                               decoration: BoxDecoration(
-                                  color: _genderselect==1?Colors.pinkAccent:Colors.grey,
+                                  color: _genderselect == 1
+                                      ? Colors.pinkAccent
+                                      : Colors.grey,
                                   borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(8),
-                                      bottomRight: Radius.circular(8)
-                                  )
-                              ),
-
+                                      bottomRight: Radius.circular(8))),
                               height: 90,
                             ),
                           ),
                         )
-
                       ],
                     ),
                   ),
@@ -161,6 +186,14 @@ class _DetailsPageState extends State<DetailsPage> {
                       child: Image.asset('assets/age.png'),
                     ),
                     title: TextFormField(
+                      controller: _ageController,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return "Enter Age";
+                        }
+                        return null;
+                      },
                       decoration: InputDecoration(
                           hintText: 'Age',
                           border: OutlineInputBorder(
@@ -180,7 +213,16 @@ class _DetailsPageState extends State<DetailsPage> {
                       child: Image.asset('assets/scale.png'),
                     ),
                     title: TextFormField(
+                      controller: _heightController,
+                      keyboardType: TextInputType.numberWithOptions(),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return "Enter Height in CM";
+                        }
+                        return null;
+                      },
                       decoration: InputDecoration(
+                          suffix: Text("CM"),
                           hintText: 'Height in CM',
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.only(
@@ -199,7 +241,16 @@ class _DetailsPageState extends State<DetailsPage> {
                       child: Image.asset("assets/wheight.png"),
                     ),
                     title: TextFormField(
+                      controller: _weightController,
+                      keyboardType: TextInputType.numberWithOptions(),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return "Enter Weight";
+                        }
+                        return null;
+                      },
                       decoration: InputDecoration(
+                          suffix: Text("KG"),
                           hintText: 'Weight',
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.only(
@@ -212,20 +263,43 @@ class _DetailsPageState extends State<DetailsPage> {
               Padding(
                 padding: EdgeInsets.all(7),
                 child: Container(
-                  child: SelectActivityLevel(),
+                  child: activityLevel(),
                 ),
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               InkWell(
-                onTap: (){
-                  UpdateDetails(context);
+                onTap: () {
+                  print(_genderselect);
+                  print(_formkey.currentState.validate());
+                  if (!_formkey.currentState.validate()||
+                      _genderselect == -1 ) {
+                    print("True");
+                    Fluttertoast.showToast(
+                        msg:
+                            "Please Update Data and Select Your Activity Level");
+                  }
+                  else
+                    {
+                      UpdateDetails(context);
+                    }
+
                   //                  Navigator.of(context).push(MaterialPageRoute(builder:(context)=>SetGoal()));
                 },
                 child: Container(
                   color: Colors.grey,
                   width: MediaQuery.of(context).size.width,
                   height: 40,
-                  child: Center(child: Text("Done",style: TextStyle(fontWeight: FontWeight.bold,fontSize:20,letterSpacing: 4,color: Colors.white70),)),
+                  child: Center(
+                      child: Text(
+                    "Done",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        letterSpacing: 4,
+                        color: Colors.white70),
+                  )),
                 ),
               )
             ],
@@ -235,61 +309,7 @@ class _DetailsPageState extends State<DetailsPage> {
     );
   }
 
-  UpdateDetails(context) {
-    UserProvider userProvider = Provider.of<UserProvider>(context,listen: false);
-    User user = userProvider.user;
-    print(user.token);
-  }
-}
-
-
-class SelectActivityLevel extends StatefulWidget {
-  @override
-  _SelectActivityLevelState createState() => _SelectActivityLevelState();
-}
-
-class _SelectActivityLevelState extends State<SelectActivityLevel> {
-  String SelectActivity="";
-  ValueNotifier<String> activityVal = ValueNotifier('Select Activity');
-
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: activityVal,
-      builder: (BuildContext context, newVal,child){
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: InkWell(
-            onTap: (){
-              SelectActivityFromMenu();
-            },
-            child: Card(
-              color: Colors.greenAccent[400],
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                Text(
-                newVal,
-                style: TextStyle(
-                fontSize: 20, color: Colors.white),
-              ),
-              Icon(
-                Icons.accessibility,
-                color: Colors.white,
-              )
-              ],
-            ),
-          ),
-        )
-          )
-        );
-      }
-    );
-  }
-
- Future SelectActivityFromMenu(){
+  Future SelectActivityFromMenu() {
     return showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
@@ -302,8 +322,8 @@ class _SelectActivityLevelState extends State<SelectActivityLevel> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: InkWell(
-                      onTap: (){
-                        SelectActivity='No Activity';
+                      onTap: () {
+                        SelectActivity = 'No Activity';
                         activityVal.value = SelectActivity;
                         Navigator.of(context).pop();
                       },
@@ -318,9 +338,9 @@ class _SelectActivityLevelState extends State<SelectActivityLevel> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         activityVal.value = 'Easy Activity';
-                        SelectActivity='Easy Activity';
+                        SelectActivity = 'Easy Activity';
                         Navigator.of(context).pop();
                       },
                       child: Container(
@@ -334,13 +354,12 @@ class _SelectActivityLevelState extends State<SelectActivityLevel> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         activityVal.value = 'Normal Activity';
-                        SelectActivity='Normal Activity';
+                        SelectActivity = 'Normal Activity';
                         Navigator.of(context).pop();
                       },
                       child: Container(
-
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [Text("Normal Activity")],
@@ -351,11 +370,10 @@ class _SelectActivityLevelState extends State<SelectActivityLevel> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         activityVal.value = 'High Activity';
-                        SelectActivity='High Activity';
+                        SelectActivity = 'High Activity';
                         Navigator.of(context).pop();
-
                       },
                       child: Container(
                         child: Row(
@@ -368,12 +386,11 @@ class _SelectActivityLevelState extends State<SelectActivityLevel> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         activityVal.value = 'Extreme Activity';
 
-//                        SelectActivity='Extreme Activity';
+                        SelectActivity = 'Extreme Activity';
                         Navigator.of(context).pop();
-
                       },
                       child: Container(
                         child: Row(
@@ -389,6 +406,61 @@ class _SelectActivityLevelState extends State<SelectActivityLevel> {
           );
         });
   }
+
+  activityLevel() {
+    return ValueListenableBuilder(
+        valueListenable: activityVal,
+        builder: (BuildContext context, newVal, child) {
+          return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: InkWell(
+                  onTap: () {
+                    SelectActivityFromMenu();
+                  },
+                  child: Card(
+                    color: Colors.greenAccent[400],
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            newVal,
+                            style: TextStyle(fontSize: 20, color: Colors.white),
+                          ),
+                          Icon(
+                            Icons.accessibility,
+                            color: Colors.white,
+                          )
+                        ],
+                      ),
+                    ),
+                  )));
+        });
+  }
+
+  UpdateDetails(context) async {
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+    User user = userProvider.user;
+
+    print(user.token);
+    Map<String, dynamic> result;
+    double tempheight=double.parse(_heightController.text)/100;
+    final Map<String, dynamic> UpdateUserData = {
+      'full_name': _nameController.text,
+      'weight': _weightController.text,
+      'height': tempheight,
+      'age': (int.parse(_ageController.text)),
+      'gender': _genderselect == 0 ? 'M' : 'F',
+      'token': user.token,
+    };
+    Response response = await post(AppUrl.updateUserData,
+        body: jsonEncode(UpdateUserData),
+        headers: {'Content-Type': 'application/json; charset=UTF-8'});
+
+    print(response.statusCode);
+    var responseData = json.decode(response.body);
+    print(responseData);
+  }
 }
-
-
