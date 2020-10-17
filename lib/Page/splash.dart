@@ -7,7 +7,8 @@ import 'package:fitty/services/user_provider.dart';
 import 'package:fitty/utils/shared_preference.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import '';
+import 'Dashboard/initializeDashboard.dart';
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -35,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
           UserProvider userProvider =  Provider.of<UserProvider>(context, listen: false);
           userProvider.setUser(loggedInUser);
           // Navigator.pop(context);
-          return NavigationPage();
+          return InitalizeDashboard();
         }
         return CircularProgressIndicator();
       },

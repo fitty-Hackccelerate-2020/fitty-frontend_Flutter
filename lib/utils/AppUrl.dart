@@ -8,5 +8,7 @@ class AppUrl {
   static const String forgotPassword = liveBaseURL + "/forgot-password";
   static const String updateUserData = liveBaseURL + "api/u/update";
   static const String updateGoalData = liveBaseURL + "api/t/initiate";
+  static const String fetchTodayGoal = liveBaseURL + "api/t/today";
+
 
 }
