@@ -1,3 +1,4 @@
+import 'package:fitty/Page/detailsPage.dart';
 import 'package:fitty/models/user.dart';
 import 'package:fitty/services/auth.dart';
 import 'package:fitty/services/user_provider.dart';
@@ -144,8 +145,11 @@ class SignUpPage extends StatelessWidget {
   _registerRequest(BuildContext context) async{
     AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
     Map<String, dynamic> response = await authProvider.register(email.text, password.text, fullName.text);
-    if(response['status'] && authProvider.authStatus == Status.LoggedIn)
+    if(response['status'] && authProvider.authStatus == Status.LoggedIn) {
       print('Register success');
+      Navigator.push(context, MaterialPageRoute(builder:
+        (context) => DetailsPage()));
+    }
     else{
       print(authProvider.authStatus);
       print(response['message']);
