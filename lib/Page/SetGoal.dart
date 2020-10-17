@@ -10,6 +10,8 @@ import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
 class SetGoal extends StatefulWidget {
+  bool flagvar;
+  SetGoal({Key key, this.flagvar}):super(key:key);
   @override
   _SetGoalState createState() => _SetGoalState();
 }
@@ -28,7 +30,7 @@ class _SetGoalState extends State<SetGoal> {
           style: TextStyle(color: Colors.black, letterSpacing: 3),
         ),
       ),
-      body: SingleChildScrollView(child: WeightSummary()),
+      body: SingleChildScrollView(child: WeightSummary(flagvar:widget.flagvar)),
     );
   }
 }
@@ -37,6 +39,8 @@ class _SetGoalState extends State<SetGoal> {
 var Suggestion = '';
 
 class WeightSummary extends StatefulWidget {
+  bool flagvar;
+  WeightSummary({Key key,this.flagvar}):super (key:key);
   @override
   _WeightSummaryState createState() => _WeightSummaryState();
 }
@@ -52,6 +56,8 @@ class _WeightSummaryState extends State<WeightSummary> {
     // TODO: implement initState
     userProvider = Provider.of<UserProvider>(context, listen: false);
     user = userProvider.user;
+    user.healthData.BMI=user.healthData.BMI??0.0;
+    user.healthData.idealWeightRange=user.healthData.idealWeightRange??[0,0];
     print(user.healthData.idealWeightRange);
     super.initState();
   }
@@ -214,7 +220,14 @@ class _WeightSummaryState extends State<WeightSummary> {
       {
         if(responseData['error']==false)
           {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>NavigationPage()));
+           if(widget.flagvar==false)
+             {
+               Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>NavigationPage()));
+             }
+             else
+               {
+                 Navigator.of(context).pop();
+               }
           }
           else
             {
