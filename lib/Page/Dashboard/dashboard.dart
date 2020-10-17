@@ -1,7 +1,5 @@
-import 'package:fitty/Page/AuthPage/login.dart';
-import 'package:fitty/Page/Profile/profile.dart';
-import 'package:fitty/services/auth.dart';
-import 'package:fitty/utils/shared_preference.dart';
+import '../../Page/Dashboard/DrinkingDeatils.dart';
+import '../../Page/Profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -72,7 +70,7 @@ class DashBoardPage extends StatelessWidget {
       child: Column(
         children: <Widget>[
           _greetingSection(context),
-          _mainInfo()
+          _mainInfo(context)
         ],
       ),
     );
@@ -101,7 +99,7 @@ class DashBoardPage extends StatelessWidget {
     );
   }
 
-  _mainInfo(){
+  _mainInfo(BuildContext context){
     return Container(
       width: width,
       color: Colors.white,
@@ -109,7 +107,7 @@ class DashBoardPage extends StatelessWidget {
       child: Column(
         children: <Widget>[
           _eatCard(),
-          _groupCard(),
+          _groupCard(context),
           _weekAnalyse(),
         ],
       ),
@@ -145,30 +143,35 @@ class DashBoardPage extends StatelessWidget {
     );
   }
 
-  _groupCard() {
+  _groupCard(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(10),
       child: Row(
         children: <Widget>[
-          _drinkingCard(),
-          _sleepingCard(),
-          _workOutCard()
+          _drinkingCard(context),
+          _sleepingCard(context),
+          _workOutCard(context)
         ],
       ),
     );
   }
 
-  _drinkingCard(){
-    return Card(
-      color: Colors.blue[100],
-      child: Container(
-        width: width / 3 - 15,
-        height: 150,
+  _drinkingCard(BuildContext context){
+    return InkWell(
+      onTap: () {
+        DrinkingDetails(context).openEditingSheet();
+      },
+      child: Card(
+        color: Colors.blue[100],
+        child: Container(
+          width: width / 3 - 15,
+          height: 150,
+        ),
       ),
     );
   }
 
-  _sleepingCard(){
+  _sleepingCard(BuildContext context){
     return Card(
       color: Colors.grey[200],
       child: Container(
@@ -178,7 +181,7 @@ class DashBoardPage extends StatelessWidget {
     );
   }
 
-  _workOutCard(){
+  _workOutCard(BuildContext context){
     return Card(
       color: Colors.red[300],
       child: Container(
@@ -225,7 +228,7 @@ class DashBoardPage extends StatelessWidget {
   _rewardsButton(BuildContext context){
     return IconButton(
       onPressed: () async{
-
+        print("rewards button pressed");
       },
       icon: Icon(Icons.flag),
     );
