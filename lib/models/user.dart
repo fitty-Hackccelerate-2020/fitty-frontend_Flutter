@@ -19,6 +19,7 @@ class User{
 
     user.basicData = BasicData(
       age:responseData['age'], weight: responseData['weight'],
+      gender: responseData['gender'],
       height: responseData['height'], activityFreq: responseData['activityFrequency']
     );
 

@@ -3,7 +3,7 @@ class Goal{
   double targetWeightPerWeek;
 
   Goal({
-    this.targetWeight = 0.0, this.targetWeightPerWeek = -1
+    this.targetWeight = 0.0, this.targetWeightPerWeek = 0.0
   });
 
 }

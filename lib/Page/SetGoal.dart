@@ -1,4 +1,13 @@
+import 'dart:convert';
+
+import 'package:fitty/Page/Dashboard/dashboard.dart';
+import 'package:fitty/models/user.dart';
+import 'package:fitty/services/user_provider.dart';
+import 'package:fitty/utils/AppUrl.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart';
+import 'package:provider/provider.dart';
 
 class SetGoal extends StatefulWidget {
   @override
@@ -12,18 +21,20 @@ class _SetGoalState extends State<SetGoal> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 5,
+        automaticallyImplyLeading: false,
         iconTheme: IconThemeData(color: Colors.grey),
         title: Text(
           "Weight Summary",
           style: TextStyle(color: Colors.black, letterSpacing: 3),
         ),
       ),
-      body: WeightSummary(),
+      body: SingleChildScrollView(child: WeightSummary()),
     );
   }
 }
 
 //WeightSummary State Full Widget
+var Suggestion = '';
 
 class WeightSummary extends StatefulWidget {
   @override
@@ -31,8 +42,55 @@ class WeightSummary extends StatefulWidget {
 }
 
 class _WeightSummaryState extends State<WeightSummary> {
+  UserProvider userProvider;
+  User user;
+  var WeightText;
+  var ConditionAccordingBMI;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    userProvider = Provider.of<UserProvider>(context, listen: false);
+    user = userProvider.user;
+    print(user.helthData.idealWeightRange);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (user.helthData.BMI < 18.5) {
+      ConditionAccordingBMI = "Underweight";
+      Suggestion =
+      'According To BMI Your Weight Too Low You Should Increase Your Weight';
+      WeightText = Text(
+        "Underweight",
+        style: TextStyle(color: Colors.yellowAccent, fontSize: 20),
+      );
+    } else if (user.helthData.BMI >= 18.5 && user.helthData.BMI <= 24.9) {
+      Suggestion =
+      'According To BMI Your Weight Is Normal You Should Keep Maintain Your Weight';
+      ConditionAccordingBMI = 'Normal';
+      WeightText = Text(
+        "Normal",
+        style: TextStyle(color: Colors.green, fontSize: 20),
+      );
+    } else if (user.helthData.BMI >= 25 && user.helthData.BMI <= 29.0) {
+      Suggestion =
+      'According To BMI You are Slightly Overweight You Should Lose Your Weight';
+      ConditionAccordingBMI = 'OverWeight';
+      WeightText = Text(
+        "OverWeight",
+        style: TextStyle(color: Colors.redAccent, fontSize: 20),
+      );
+    } else {
+      Suggestion =
+      'According To BMI Your Weight is Too High You Should Lose Your Weight';
+      ConditionAccordingBMI = "Obess";
+      WeightText = Text(
+        "Obess",
+        style: TextStyle(color: Colors.red, fontSize: 20),
+      );
+    }
     return Container(
       child: Column(
         children: [
@@ -59,13 +117,11 @@ class _WeightSummaryState extends State<WeightSummary> {
                             ),
                           ),
                           Text(
-                            "Your BMI: 22",
+                            "Your BMI: ${user.helthData.BMI.toString()
+                                .substring(0, 4)}",
                             style: TextStyle(fontSize: 10),
                           ),
-                          Text(
-                            "Normal",
-                            style: TextStyle(fontSize: 20),
-                          )
+                          WeightText
                         ],
                       ),
                     ),
@@ -87,7 +143,8 @@ class _WeightSummaryState extends State<WeightSummary> {
                             style: TextStyle(fontSize: 10),
                           ),
                           Text(
-                            "50-60 Kg",
+                            "${user.helthData.idealWeightRange[0]}-${user
+                                .helthData.idealWeightRange[1]} Kg",
                             style: TextStyle(fontSize: 20),
                           )
                         ],
@@ -101,11 +158,20 @@ class _WeightSummaryState extends State<WeightSummary> {
           SetWeightGoalWidget(),
           Padding(
             padding: const EdgeInsets.all(30.0),
-            child: Card(
-              color: Colors.grey,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("Commit",style: TextStyle(color: Colors.white,fontSize: 20),),
+            child: InkWell(
+              onTap: () {
+                UpdateData(context);
+
+              },
+              child: Card(
+                color: Colors.grey,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Set Target",
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                ),
               ),
             ),
           )
@@ -113,7 +179,55 @@ class _WeightSummaryState extends State<WeightSummary> {
       ),
     );
   }
+
+  UpdateData(context) async {
+    print(user.token);
+    Map<String, dynamic> result;
+
+
+
+   if(weighlossgoal=='Set Goal Level')
+     {
+       Fluttertoast.showToast(msg: "Please Set Your Goal Speed",toastLength: Toast.LENGTH_LONG);
+     }
+     else{
+       print(weighlossgoal);
+       print("${user.goal.targetWeightPerWeek}");
+       print("${user.goal.targetWeight}");
+
+     final Map<String, dynamic> UpdateGoalData = {
+     'goalWeight': user.goal.targetWeight,
+     'perWeekWeightGoal'
+    : user.goal.targetWeightPerWeek,
+    'token': user.token,
+    };
+    Fluttertoast.showToast(
+    msg: "Please Wait Data is Loading", toastLength: Toast.LENGTH_LONG);
+    Response response = await post(AppUrl.updateGoalData,
+    body: jsonEncode(UpdateGoalData),
+    headers: {'Content-Type': 'application/json; charset=UTF-8'});
+
+    print(response.statusCode);
+    var responseData = json.decode(response.body);
+    print(responseData);
+    if(response.statusCode==200 )
+      {
+        if(responseData['error']==false)
+          {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>NavigationPage()));
+          }
+          else
+            {
+              Fluttertoast.showToast(msg: "Something Went Wrong");
+            }
+      }
+
+//    Navigator.of(context)
+//        .pushReplacement(MaterialPageRoute(builder: (context) => SetGoal()));
+    }
+   }
 }
+
 
 /*Here Is The SetWeightGoalWidget*/
 
@@ -122,11 +236,24 @@ class SetWeightGoalWidget extends StatefulWidget {
   _SetWeightGoalWidgetState createState() => _SetWeightGoalWidgetState();
 }
 
+var weighlossgoal = "Set Goal Level";
 
-var weighlossgoal="";
 class _SetWeightGoalWidgetState extends State<SetWeightGoalWidget> {
   final _formkey = GlobalKey<FormState>();
-  var weightgoal=61.0;
+  UserProvider userProvider;
+  User user;
+  double weightgoal;
+
+  void initState() {
+    // TODO: implement initState
+    userProvider = Provider.of<UserProvider>(context, listen: false);
+    user = userProvider.user;
+    weightgoal = user.basicData.weight;
+    user.goal.targetWeight = weightgoal;
+//    print(user.helthData.idealWeightRange);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -137,9 +264,19 @@ class _SetWeightGoalWidgetState extends State<SetWeightGoalWidget> {
           child: Card(
             child: Column(
               children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Suggestion: ${Suggestion}",
+                    style: TextStyle(fontSize: 11),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
                 Text(
-                  "Set Target Weigth",
-                  style: TextStyle(),
+                  "Set Target Weight",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10, bottom: 40),
@@ -153,10 +290,9 @@ class _SetWeightGoalWidgetState extends State<SetWeightGoalWidget> {
                             style: TextStyle(fontSize: 30),
                           ),
                           onTap: () {
-                            weightgoal=weightgoal-0.5;
-                            setState(() {
-
-                            });
+                            weightgoal = weightgoal - 0.5;
+                            user.goal.targetWeight = weightgoal;
+                            setState(() {});
                           },
                         ),
                       ),
@@ -169,11 +305,10 @@ class _SetWeightGoalWidgetState extends State<SetWeightGoalWidget> {
                       Container(
                           child: InkWell(
                               onTap: () {
-                                weightgoal=weightgoal+0.5;
+                                weightgoal = weightgoal + 0.5;
+                                user.goal.targetWeight = weightgoal;
                                 print(weightgoal);
-                                setState(() {
-
-                                });
+                                setState(() {});
                               },
                               child: Text(
                                 "+",
@@ -182,16 +317,14 @@ class _SetWeightGoalWidgetState extends State<SetWeightGoalWidget> {
                     ],
                   ),
                 ),
-                Text("How quickly do you want to lose weight ?"),
+                Text("How quickly do you want to Achive Your Target ?"),
                 Padding(
                   padding: const EdgeInsets.only(
                       top: 20.0, left: 80, right: 80, bottom: 50),
                   child: InkWell(
                       onTap: () {
                         SetGoalAccordingFromMenu(context).whenComplete(() {
-                          setState(() {
-
-                          });
+                          setState(() {});
                         });
                       },
                       child: Card(
@@ -222,83 +355,108 @@ class _SetWeightGoalWidgetState extends State<SetWeightGoalWidget> {
       ),
     );
   }
-}
 
-Future SetGoalAccordingFromMenu(context) {
-  return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return new AlertDialog(
-          content: Container(
-            height: 200,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: InkWell(
-                    onTap: (){
-                      weighlossgoal='Easy';
-                      Navigator.of(context).pop();
-                    },
-                    child: Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [Text("Easy"), Text("0.25 Kg/Week")],
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: InkWell(
-                    onTap: (){
-                      weighlossgoal='Medium';
-                      Navigator.of(context).pop();
-                    },
-                    child: Container(
-                      child: Row(
+  Future SetGoalAccordingFromMenu(context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return new AlertDialog(
+            content: Container(
+              height: 200,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: () {
+                        weighlossgoal = 'Maintain';
+                        user.goal.targetWeightPerWeek=0.0;
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [Text("Medium"), Text("0.25 Kg/Week")],
+                          children: [Text("Maintain"), Text("0.0 Kg/Week")],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: InkWell(
-                    onTap: (){
-                      weighlossgoal='Hard';
-                      Navigator.of(context).pop();
-                    },
-                    child: Container(
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: () {
+                        weighlossgoal = 'Easy';
+                        user.goal.targetWeightPerWeek=0.5;
 
-                      child: Row(
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [Text("Hard"), Text("0.25 Kg/Week")],
+                          children: [Text("Easy"), Text("0.5 Kg/Week")],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: InkWell(
-                    onTap: (){
-                      weighlossgoal='Extreme';
-                      Navigator.of(context).pop();
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: () {
+                        weighlossgoal = 'Medium';
+                        user.goal.targetWeightPerWeek=1.0;
+                        print(user.goal.targetWeightPerWeek);
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [Text("Medium"), Text("1.0 Kg/Week")],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: () {
+                        weighlossgoal = 'Hard';
+                        user.goal.targetWeightPerWeek=1.5;
 
-                    },
-                    child: Container(
-                      child: Row(
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [Text("Extreme"), Text("0.25 Kg/Week")],
+                          children: [Text("Hard"), Text("1.5 Kg/Week")],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: () {
+                        weighlossgoal = 'Extreme';
+                        user.goal.targetWeightPerWeek=2.0;
+
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [Text("Extreme"), Text("2.00 Kg/Week")],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
-      });
+          );
+        });
+  }
+
+
 }
+
