@@ -19,11 +19,11 @@ class User{
   User({this.token, this.fullName, this.basicData, this.healthData, this.waterData,
     this.dailyData, this.diet, this.sleep, this.workOut, this.goal});
 
-  factory User.fromJson(Map<String, dynamic> responseData) {
-    // print(" token = ${responseData['data']}");
+  factory User.fromJson(Map<String, dynamic> responseData, {String token = null}) {
+    print(" token = ${responseData['data']}");
 
-    User user = User(token: responseData['data'] ?? null);
-    user.token = responseData['token'] ?? null;
+    User user = User(token: token ?? responseData['data'] ?? 'token = -1');
+    // user.token = responseData['token'] ?? null;
     user.fullName = responseData['full_name'] ?? null;
 
     print('basic');
@@ -85,6 +85,7 @@ class User{
     );
 
     print("provider updated");
+    print(user.token);
     /// previously this was factory method
     return user;
   }
