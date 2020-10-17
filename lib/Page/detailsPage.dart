@@ -34,21 +34,21 @@ class _DetailsPageState extends State<DetailsPage> {
   @override
   void initState() {
     UserProvider userProvider =
-        Provider.of<UserProvider>(context, listen: false);
+    Provider.of<UserProvider>(context, listen: false);
     user=userProvider.user;
     if(widget.flagvar==true)
-      {
-        print("ok");
-        print(" age ${user.basicData.age}");
-       _nameController.text=user.fullName;
-       _ageController.text=user.basicData.age.toString();
-       _genderselect=user.basicData.gender=="Male"?0:1;
-       _heightController.text=user.basicData.height.toString();
-       _weightController.text=user.basicData.weight.toString();
-       print(user.basicData.activityFreq);
-       activityVal.value=user.basicData.activityFreq.toString();
+    {
+      print("ok");
+      print(" age ${user.basicData.age}");
+      _nameController.text=user.fullName;
+      _ageController.text=user.basicData.age.toString();
+      _genderselect=user.basicData.gender=="Male"?0:1;
+      _heightController.text=user.basicData.height.toString();
+      _weightController.text=user.basicData.weight.toString();
+      print(user.basicData.activityFreq);
+      activityVal.value=user.basicData.activityFreq.toString();
 
-      }
+    }
     // TODO: implement initState
     super.initState();
   }
@@ -157,9 +157,9 @@ class _DetailsPageState extends State<DetailsPage> {
                             child: Container(
                               child: Center(
                                   child: Text(
-                                "Male",
-                                style: TextStyle(color: Colors.white70),
-                              )),
+                                    "Male",
+                                    style: TextStyle(color: Colors.white70),
+                                  )),
                               decoration: BoxDecoration(
                                   color: _genderselect == 0
                                       ? Colors.lightGreen
@@ -305,7 +305,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     print("True");
                     Fluttertoast.showToast(
                         msg:
-                            "Please Update Data and Select Your Activity Level");
+                        "Please Update Data and Select Your Activity Level");
                   } else {
                     UpdateDetails(context);
                   }
@@ -318,13 +318,13 @@ class _DetailsPageState extends State<DetailsPage> {
                   height: 40,
                   child: Center(
                       child: Text(
-                    "Done",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        letterSpacing: 4,
-                        color: Colors.white70),
-                  )),
+                        "Done",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            letterSpacing: 4,
+                            color: Colors.white70),
+                      )),
                 ),
               )
             ],
@@ -466,7 +466,7 @@ class _DetailsPageState extends State<DetailsPage> {
 
   UpdateDetails(context) async {
     UserProvider userProvider =
-        Provider.of<UserProvider>(context, listen: false);
+    Provider.of<UserProvider>(context, listen: false);
     User user = userProvider.user;
 
     print(user.token);
@@ -504,13 +504,13 @@ class _DetailsPageState extends State<DetailsPage> {
     print(responseData['data']['weightRange'][0].runtimeType);
     print(responseData['data']['bmi']);
     user.healthData.idealWeightRange = responseData['data']['weightRange'];
-if(widget.flagvar==false)
-  {
+    if(widget.flagvar==false)
+    {
 
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) => SetGoal(flagvar: false,)));
-  }
-  else
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) => SetGoal(flagvar: false,)));
+    }
+    else
     {
       Navigator.of(context).pop();
     }

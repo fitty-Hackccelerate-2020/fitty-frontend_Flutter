@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:fitty/services/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:fitty/models/user.dart';
@@ -19,6 +20,8 @@ enum Status {
 }
 
 class AuthProvider with ChangeNotifier {
+  UserProvider userProvider;
+  User _user;
 
   Status _loggedInStatus = Status.NotLoggedIn;
   Status _registeredInStatus = Status.NotRegistered;
@@ -64,14 +67,13 @@ class AuthProvider with ChangeNotifier {
 
     final Map<String, dynamic> responseData = jsonDecode(response.body);
     if (response.statusCode == 200) {
-
-      User authUser = User.fromJson(responseData);
-      await UserPreferences().saveUser(authUser);
+      _user = User.fromJson(responseData);
+      await UserPreferences().saveUser(_user);
       _loggedInStatus = Status.LoggedIn;
       notifyListeners();
       result = {
         'status': true,
-        'user': authUser
+        'user': _user
       };
       return result;
       // notifyListeners();
@@ -95,19 +97,29 @@ class AuthProvider with ChangeNotifier {
         'password': password,
         'full_name': fullName
     };
-    Response response =  await post(AppUrl.register,
-        body: jsonEncode(registrationData),
-        headers: {'Content-Type': 'application/json; charset=UTF-8'});
+    Response response;
+     try{
+       response  = await post(AppUrl.register,
+           body: jsonEncode(registrationData),
+           headers: {'Content-Type': 'application/json; charset=UTF-8'});
 
+     }
+     catch(e){
+       print('Register error');
+       print(e.toString());
+     }
     Map<String, dynamic> responseData = jsonDecode(response.body);
     if(response.statusCode == 200){
-      User registeredUser = User.fromJson(responseData);
+      _user = User.fromJson(responseData);
+      print(User.fromJson(responseData).token);
+
+      print(_user);
       _loggedInStatus = Status.LoggedIn;
       result = {
         'status' : true,
-        'user': registeredUser
+        'user': _user
       };
-      await UserPreferences().saveUser(registeredUser);
+      await UserPreferences().saveUser(_user);
       notifyListeners();
     }
     else{
