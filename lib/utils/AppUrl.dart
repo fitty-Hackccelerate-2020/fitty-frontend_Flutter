@@ -7,5 +7,6 @@ class AppUrl {
   static const String register = liveBaseURL + "auth/register";
   static const String forgotPassword = liveBaseURL + "/forgot-password";
   static const String updateUserData = liveBaseURL + "api/u/update";
+  static const String updateGoalData = liveBaseURL + "api/t/initiate";
 
 }

@@ -273,17 +273,15 @@ class _DetailsPageState extends State<DetailsPage> {
                 onTap: () {
                   print(_genderselect);
                   print(_formkey.currentState.validate());
-                  if (!_formkey.currentState.validate()||
-                      _genderselect == -1 ) {
+                  if (!_formkey.currentState.validate() ||
+                      _genderselect == -1) {
                     print("True");
                     Fluttertoast.showToast(
                         msg:
                             "Please Update Data and Select Your Activity Level");
+                  } else {
+                    UpdateDetails(context);
                   }
-                  else
-                    {
-                      UpdateDetails(context);
-                    }
 
                   //                  Navigator.of(context).push(MaterialPageRoute(builder:(context)=>SetGoal()));
                 },
@@ -446,7 +444,7 @@ class _DetailsPageState extends State<DetailsPage> {
 
     print(user.token);
     Map<String, dynamic> result;
-    double tempheight=double.parse(_heightController.text)/100;
+    double tempheight = double.parse(_heightController.text) / 100;
     final Map<String, dynamic> UpdateUserData = {
       'full_name': _nameController.text,
       'weight': _weightController.text,
@@ -455,6 +453,8 @@ class _DetailsPageState extends State<DetailsPage> {
       'gender': _genderselect == 0 ? 'M' : 'F',
       'token': user.token,
     };
+    Fluttertoast.showToast(
+        msg: "Please Wait Data is Loading", toastLength: Toast.LENGTH_LONG);
     Response response = await post(AppUrl.updateUserData,
         body: jsonEncode(UpdateUserData),
         headers: {'Content-Type': 'application/json; charset=UTF-8'});
@@ -462,5 +462,22 @@ class _DetailsPageState extends State<DetailsPage> {
     print(response.statusCode);
     var responseData = json.decode(response.body);
     print(responseData);
+    user.fullName = _nameController.text;
+    user.basicData.weight = double.parse(_weightController.text);
+    user.basicData.height = double.parse(_heightController.text);
+    user.basicData.age = int.parse(_ageController.text);
+    user.basicData.gender = _genderselect == 0 ? "Male" : "Female";
+
+    /*update respose data*/
+//    double bmi = double.parse(responseData['data']['bmi']);
+//    d=double.parse(responseData['data']['bmi']);
+    print(responseData['data']['bmi'].runtimeType);
+    user.helthData.BMI = double.parse(responseData['data']['bmi'].toString());
+    print(responseData['data']['weightRange'][0].runtimeType);
+    print(responseData['data']['bmi']);
+    user.helthData.idealWeightRange = responseData['data']['weightRange'];
+
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (context) => SetGoal()));
   }
 }
