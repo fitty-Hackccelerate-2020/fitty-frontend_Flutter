@@ -151,7 +151,7 @@ class SignUpPage extends StatelessWidget {
       UserProvider userProvider =  Provider.of<UserProvider>(context, listen: false);
       userProvider.setUser(registeredUser);
       Navigator.push(context, MaterialPageRoute(builder:
-        (context) => DetailsPage()));
+        (context) => DetailsPage(flagvar: false,)));
     }
     else{
       print(authProvider.authStatus);

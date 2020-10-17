@@ -11,6 +11,10 @@ import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 
 class DetailsPage extends StatefulWidget {
+  bool flagvar;
+
+  DetailsPage({Key key, this.flagvar}) : super(key: key);
+
   @override
   _DetailsPageState createState() => _DetailsPageState();
 }
@@ -25,6 +29,29 @@ class _DetailsPageState extends State<DetailsPage> {
   var _weightController = TextEditingController();
   static String SelectActivity = "Select Activity";
   ValueNotifier<String> activityVal = ValueNotifier(SelectActivity);
+  User user;
+
+  @override
+  void initState() {
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+    user=userProvider.user;
+    if(widget.flagvar==true)
+      {
+        print("ok");
+        print(" age ${user.basicData.age}");
+       _nameController.text=user.fullName;
+       _ageController.text=user.basicData.age.toString();
+       _genderselect=user.basicData.gender=="Male"?0:1;
+       _heightController.text=user.basicData.height.toString();
+       _weightController.text=user.basicData.weight.toString();
+       print(user.basicData.activityFreq);
+       activityVal.value=user.basicData.activityFreq.toString();
+
+      }
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -466,6 +493,7 @@ class _DetailsPageState extends State<DetailsPage> {
     user.basicData.weight = double.parse(_weightController.text);
     user.basicData.height = double.parse(_heightController.text);
     user.basicData.age = int.parse(_ageController.text);
+    user.basicData.activityFreq=activityVal.value;
     user.basicData.gender = _genderselect == 0 ? "Male" : "Female";
 
     /*update respose data*/
@@ -476,8 +504,15 @@ class _DetailsPageState extends State<DetailsPage> {
     print(responseData['data']['weightRange'][0].runtimeType);
     print(responseData['data']['bmi']);
     user.healthData.idealWeightRange = responseData['data']['weightRange'];
+if(widget.flagvar==false)
+  {
 
     Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) => SetGoal()));
+        .pushReplacement(MaterialPageRoute(builder: (context) => SetGoal(flagvar: false,)));
+  }
+  else
+    {
+      Navigator.of(context).pop();
+    }
   }
 }

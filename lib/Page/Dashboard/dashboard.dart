@@ -140,8 +140,22 @@ class DashBoardPage extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     Container(
-                      child: Text("Consumed calories : ")
+                      child: Image.asset('assets/cal.png',height: 80,width: 80,),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Container(
+                        child: Text
+                          ("Daily Calories",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),)
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        child: Text("1200/1500",style: TextStyle(fontSize: 15),),
+                      ),
                     )
+
                   ],
                 ),
               ),
@@ -209,6 +223,29 @@ class DashBoardPage extends StatelessWidget {
       child: Container(
         width: width / 3 - 15,
         height: 150,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                child: Image.asset('assets/workout.png',height: 60,width: 60,),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top:20.0),
+              child: Container(
+                child: Text("Burnt Calories",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 12,color: Colors.white),),
+
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                child: Text("293 Cal",style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white),),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
