@@ -60,6 +60,7 @@ class _InitalizeDashboardState extends State<InitalizeDashboard> {
     final Map<String, dynamic> DailyGoalData = {
       'token':user.token,
     };
+
     Fluttertoast.showToast(
         msg: "Please Wait Data is Loading", toastLength: Toast.LENGTH_LONG);
     Response response = await post(AppUrl.fetchTodayGoal,
@@ -69,27 +70,10 @@ class _InitalizeDashboardState extends State<InitalizeDashboard> {
     print(response.statusCode);
 
     Map<String, dynamic> responseData = jsonDecode(response.body);
-    print(responseData);
-    print(responseData['data']);
-    print("hi");
-    print(responseData['data']['diet']['foodName']);
-    print("hid");
-    user.dailyData.caloriesToConsume=responseData['data']['caloriesToConsume'];
-    user.dailyData.caloriesConsumed=responseData['data']['caloriesConsumed'];
-    user.dailyData.drankWater=responseData['data']['drankWater'];
-    print("hi");
-    user.diet.foodName=responseData['data']['diet']['foodName'];
-    user.diet.caloriesGot=responseData['data']['died']['caloriesGot'];
-    user.diet.quantity=responseData['data']['diet']['quantity'];
-    user.sleep.wokeupAt=responseData['data']['sleep']['wokeupAt'];
-    user.sleep.sleepAt=responseData['data']['sleep']['sleepAt'];
-    user.workOut.caloriesBurnt=responseData['data']['workout']['caloriesBurnt'];
-    user.workOut.workoutName=responseData['data']['workout']['workoutName'];
-    user.healthData = HealthData();
-    user.waterData = WaterData(current: 0, target: 10);
-    user.basicData = BasicData();
-    print("updated");
-    print(responseData['data']['caloriesConsumed']);
+    print('1');
+    user = User.fromJson(responseData);
+
+    print("updated to UserProvider");
     if(responseData['error']==false||response.statusCode!=200)
       {
         Fluttertoast.showToast(msg: "Something Went Wrong");
