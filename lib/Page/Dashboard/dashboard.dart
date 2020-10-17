@@ -93,7 +93,7 @@ class DashBoardPage extends StatelessWidget {
               Image.asset('assets/avatar-man.png'),
               Text("Hello, userName", style: TextStyle(fontSize: 20)),
 //              Icon(Icons.pie_chart)
-            _logoutButton(context)
+            _rewardsButton(context)
             ],
           )
         ],
@@ -222,16 +222,12 @@ class DashBoardPage extends StatelessWidget {
     );
   }
 
-  _logoutButton(BuildContext context){
-    return RaisedButton(
+  _rewardsButton(BuildContext context){
+    return IconButton(
       onPressed: () async{
-        await UserPreferences().removeUser();
-        AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
-        authProvider.logOut();
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:
-            (context) => LoginPage()), (route) => false);
+
       },
-      child: Text("Logout"),
+      icon: Icon(Icons.flag),
     );
   }
 }
