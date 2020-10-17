@@ -52,13 +52,13 @@ class _WeightSummaryState extends State<WeightSummary> {
     // TODO: implement initState
     userProvider = Provider.of<UserProvider>(context, listen: false);
     user = userProvider.user;
-    print(user.helthData.idealWeightRange);
+    print(user.healthData.idealWeightRange);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (user.helthData.BMI < 18.5) {
+    if (user.healthData.BMI < 18.5) {
       ConditionAccordingBMI = "Underweight";
       Suggestion =
       'According To BMI Your Weight Too Low You Should Increase Your Weight';
@@ -66,7 +66,7 @@ class _WeightSummaryState extends State<WeightSummary> {
         "Underweight",
         style: TextStyle(color: Colors.yellowAccent, fontSize: 20),
       );
-    } else if (user.helthData.BMI >= 18.5 && user.helthData.BMI <= 24.9) {
+    } else if (user.healthData.BMI >= 18.5 && user.healthData.BMI <= 24.9) {
       Suggestion =
       'According To BMI Your Weight Is Normal You Should Keep Maintain Your Weight';
       ConditionAccordingBMI = 'Normal';
@@ -74,7 +74,7 @@ class _WeightSummaryState extends State<WeightSummary> {
         "Normal",
         style: TextStyle(color: Colors.green, fontSize: 20),
       );
-    } else if (user.helthData.BMI >= 25 && user.helthData.BMI <= 29.0) {
+    } else if (user.healthData.BMI >= 25 && user.healthData.BMI <= 29.0) {
       Suggestion =
       'According To BMI You are Slightly Overweight You Should Lose Your Weight';
       ConditionAccordingBMI = 'OverWeight';
@@ -117,7 +117,7 @@ class _WeightSummaryState extends State<WeightSummary> {
                             ),
                           ),
                           Text(
-                            "Your BMI: ${user.helthData.BMI.toString()
+                            "Your BMI: ${user.healthData.BMI.toString()
                                 .substring(0, 4)}",
                             style: TextStyle(fontSize: 10),
                           ),
@@ -143,8 +143,8 @@ class _WeightSummaryState extends State<WeightSummary> {
                             style: TextStyle(fontSize: 10),
                           ),
                           Text(
-                            "${user.helthData.idealWeightRange[0]}-${user
-                                .helthData.idealWeightRange[1]} Kg",
+                            "${user.healthData.idealWeightRange[0]}-${user
+                                .healthData.idealWeightRange[1]} Kg",
                             style: TextStyle(fontSize: 20),
                           )
                         ],
