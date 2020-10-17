@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
 
         },
         home: MyHomePage(title: 'Flutter Demo Home Page'),
+        debugShowCheckedModeBanner: false,
       ),
     );
   }
