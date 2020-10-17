@@ -18,13 +18,14 @@ class MyApp extends StatelessWidget {
       providers: [
         // hangeNotifierPro/vider<AppState>(create: (_) => AppState()),
         ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
-        // ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider())
+         ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider())
       ],
       child: MaterialApp(
         routes: {
 
         },
         home: MyHomePage(title: 'Flutter Demo Home Page'),
+        debugShowCheckedModeBanner: false,
       ),
     );
   }

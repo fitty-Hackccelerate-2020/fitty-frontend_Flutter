@@ -1,6 +1,8 @@
 import 'package:fitty/Page/SetGoal.dart';
+import 'package:fitty/services/user_provider.dart';
 import 'package:flutter/material.dart';
-
+import 'package:fitty/models/user.dart';
+import 'package:provider/provider.dart';
 class DetailsPage extends StatefulWidget {
   @override
   _DetailsPageState createState() => _DetailsPageState();
@@ -28,6 +30,8 @@ class _DetailsPageState extends State<DetailsPage> {
           Center(
               child: InkWell(
                   onTap: () {
+//                    User user;
+//                    print(user.token);
                     //Done Button
                   },
                   child: Padding(
@@ -208,26 +212,14 @@ class _DetailsPageState extends State<DetailsPage> {
               Padding(
                 padding: EdgeInsets.all(7),
                 child: Container(
-                  child: ListTile(
-                    leading: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.asset("assets/bmi.png"),
-                    ),
-                    title: TextFormField(
-                      decoration: InputDecoration(
-                          hintText: 'BMI',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(5.0),
-                                  topRight: Radius.circular(5.0)))),
-                    ),
-                  ),
+                  child: SelectActivityLevel(),
                 ),
               ),
               SizedBox(height: 10,),
               InkWell(
                 onTap: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder:(context)=>SetGoal()));
+                  UpdateDetails(context);
+                  //                  Navigator.of(context).push(MaterialPageRoute(builder:(context)=>SetGoal()));
                 },
                 child: Container(
                   color: Colors.grey,
@@ -241,6 +233,161 @@ class _DetailsPageState extends State<DetailsPage> {
         ),
       ),
     );
+  }
+
+  UpdateDetails(context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context,listen: false);
+    User user = userProvider.user;
+    print(user.token);
+  }
+}
+
+
+class SelectActivityLevel extends StatefulWidget {
+  @override
+  _SelectActivityLevelState createState() => _SelectActivityLevelState();
+}
+
+class _SelectActivityLevelState extends State<SelectActivityLevel> {
+  String SelectActivity="";
+  ValueNotifier<String> activityVal = ValueNotifier('Select Activity');
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: activityVal,
+      builder: (BuildContext context, newVal,child){
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: InkWell(
+            onTap: (){
+              SelectActivityFromMenu();
+            },
+            child: Card(
+              color: Colors.greenAccent[400],
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                Text(
+                newVal,
+                style: TextStyle(
+                fontSize: 20, color: Colors.white),
+              ),
+              Icon(
+                Icons.accessibility,
+                color: Colors.white,
+              )
+              ],
+            ),
+          ),
+        )
+          )
+        );
+      }
+    );
+  }
+
+ Future SelectActivityFromMenu(){
+    return showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return new AlertDialog(
+            content: Container(
+              height: 200,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: (){
+                        SelectActivity='No Activity';
+                        activityVal.value = SelectActivity;
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [Text("No Activity")],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: (){
+                        activityVal.value = 'Easy Activity';
+                        SelectActivity='Easy Activity';
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [Text("Easy Activity")],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: (){
+                        activityVal.value = 'Normal Activity';
+                        SelectActivity='Normal Activity';
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [Text("Normal Activity")],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: (){
+                        activityVal.value = 'High Activity';
+                        SelectActivity='High Activity';
+                        Navigator.of(context).pop();
+
+                      },
+                      child: Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [Text("High Activity")],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: (){
+                        activityVal.value = 'Extreme Activity';
+
+//                        SelectActivity='Extreme Activity';
+                        Navigator.of(context).pop();
+
+                      },
+                      child: Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [Text("Extreme Activity")],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
 

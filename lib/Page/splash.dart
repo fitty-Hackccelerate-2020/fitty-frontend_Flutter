@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
       future: UserPreferences().getUser(),
       builder: (BuildContext context, AsyncSnapshot snapshot){
         if(snapshot.connectionState == ConnectionState.waiting)
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         else if(snapshot.connectionState == ConnectionState.done){
           User loggedInUser = snapshot.data;
           print(loggedInUser.token);

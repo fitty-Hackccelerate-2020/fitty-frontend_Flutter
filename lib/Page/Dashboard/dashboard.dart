@@ -70,14 +70,14 @@ class DashBoardPage extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          _greetingSection(),
+          _greetingSection(context),
           _mainInfo()
         ],
       ),
     );
   }
 
-  _greetingSection(){
+  _greetingSection(context){
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       height: height / 8,
@@ -91,7 +91,8 @@ class DashBoardPage extends StatelessWidget {
             children: <Widget>[
               Image.asset('assets/avatar-man.png'),
               Text("Hello, userName", style: TextStyle(fontSize: 20)),
-              Icon(Icons.pie_chart)
+//              Icon(Icons.pie_chart)
+            _logoutButton(context)
             ],
           )
         ],
