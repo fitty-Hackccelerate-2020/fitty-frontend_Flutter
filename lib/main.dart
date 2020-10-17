@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       providers: [
         // hangeNotifierPro/vider<AppState>(create: (_) => AppState()),
         ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
-        // ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider())
+        ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider())
       ],
       child: MaterialApp(
         routes: {
