@@ -1,3 +1,6 @@
+import 'package:fitty/Page/SetGoal.dart';
+import 'package:fitty/Page/detailsPage.dart';
+
 import '../../Page/AuthPage/login.dart';
 import '../../services/auth.dart';
 import '../../utils/shared_preference.dart';
@@ -8,40 +11,33 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.all(5),
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              _personalDetailsTile(),
-              Padding(
-                padding: EdgeInsets.all(10),
-              ),
-              _otherDetailsCard(context),
-            ],
-          ),
+        body: Container(
+      padding: EdgeInsets.all(5),
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            _personalDetailsTile(),
+            Padding(
+              padding: EdgeInsets.all(10),
+            ),
+            _otherDetailsCard(context),
+          ],
         ),
-      )
-    );
+      ),
+    ));
   }
 
   _personalDetailsTile() {
     return Container(
-      
       child: Row(
         children: <Widget>[
           Image.asset('assets/avatar-man.png', width: 100, height: 100),
           Column(
             children: <Widget>[
-              Container(
-                  child: Text('User name')
-              ),
-              Container(
-                child: Text('User - since : October-2020')
-              )
+              Container(child: Text('User name')),
+              Container(child: Text('User - since : October-2020'))
             ],
           )
-
         ],
       ),
     );
@@ -54,32 +50,43 @@ class ProfilePage extends StatelessWidget {
       child: Container(
         child: Column(
           children: <Widget>[
-            _bodyDetaildTile(),
-            _settingsTile(),
+            _bodyDetaildTile(context),
+            _settingsTile(context),
             _logOutTile(context)
           ],
         ),
       ),
     );
-
   }
 
-  _bodyDetaildTile() {
+  _bodyDetaildTile(context) {
     return Container(
-      child: ListTile(
-        leading: Icon(Icons.person, color: Colors.blue[800]),
-        title: Text('Basic Information'),
-        subtitle: Text('Height, Weight, Age, Gender, Activity-level'),
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => DetailsPage(flagvar: true,)));
+        },
+        child: ListTile(
+          leading: Icon(Icons.person, color: Colors.blue[800]),
+          title: Text('Basic Information'),
+          subtitle: Text('Height, Weight, Age, Gender, Activity-level'),
+        ),
       ),
     );
   }
 
-  _settingsTile() {
+  _settingsTile(context) {
     return Container(
-      child: ListTile(
-        leading: Icon(Icons.flag, color: Colors.greenAccent),
-        title: Text('Weight Goal'),
-        subtitle: Text('view/update goal'),
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => SetGoal()));
+        },
+        child: ListTile(
+          leading: Icon(Icons.flag, color: Colors.greenAccent),
+          title: Text('Weight Goal'),
+          subtitle: Text('view/update goal'),
+        ),
       ),
     );
   }
@@ -87,20 +94,24 @@ class ProfilePage extends StatelessWidget {
   _logOutTile(BuildContext context) {
     return Container(
       child: ListTile(
-        leading: Icon(Icons.power_settings_new, color: Colors.red),
-        title: Text('Logout',),
-        // subtitle: Text('Height, Weight, Age, Gender, Activity-level'),
-        onTap: _logoutAction(context)
-      ),
+          leading: Icon(Icons.power_settings_new, color: Colors.red),
+          title: Text(
+            'Logout',
+          ),
+          // subtitle: Text('Height, Weight, Age, Gender, Activity-level'),
+          onTap: () {
+            _logoutAction(context);
+          }),
     );
   }
 
-  _logoutAction(BuildContext context){
+  _logoutAction(BuildContext context) {
     UserPreferences().removeUser();
-    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
     authProvider.logOut();
     print("Sign-out");
-    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:
-        (context) => LoginPage()), (route) => false);
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (context) => LoginPage()), (route) => false);
   }
 }

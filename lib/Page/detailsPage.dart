@@ -460,31 +460,24 @@ class _DetailsPageState extends State<DetailsPage> {
         headers: {'Content-Type': 'application/json; charset=UTF-8'});
 
     print(response.statusCode);
-    if(response.statusCode == 200){
+    var responseData = json.decode(response.body);
+    print(responseData);
+    user.fullName = _nameController.text;
+    user.basicData.weight = double.parse(_weightController.text);
+    user.basicData.height = double.parse(_heightController.text);
+    user.basicData.age = int.parse(_ageController.text);
+    user.basicData.gender = _genderselect == 0 ? "Male" : "Female";
 
-      var responseData = jsonDecode(response.body);
-      print(responseData);
-
-      print(user.fullName);
-      user.fullName = _nameController.text;
-      user.basicData.weight = double.parse(_weightController.text);
-      user.basicData.height = double.parse(_heightController.text);
-      user.basicData.age = int.parse(_ageController.text);
-      user.basicData.gender = _genderselect == 0 ? "Male" : "Female";
-
-      /*update respose data*/
+    /*update respose data*/
 //    double bmi = double.parse(responseData['data']['bmi']);
 //    d=double.parse(responseData['data']['bmi']);
-      print(responseData['data']['bmi'].toString());
-      user.healthData.BMI = double.parse(responseData['data']['bmi'].toString());
-      print(responseData['data']['weightRange'][0].runtimeType);
-      print(responseData['data']['bmi']);
-      user.healthData.idealWeightRange = responseData['data']['weightRange'];
+    print(responseData['data']['bmi'].runtimeType);
+    user.healthData.BMI = double.parse(responseData['data']['bmi'].toString());
+    print(responseData['data']['weightRange'][0].runtimeType);
+    print(responseData['data']['bmi']);
+    user.healthData.idealWeightRange = responseData['data']['weightRange'];
 
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) => SetGoal()));
-    }
-    else
-      print('error 00');
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (context) => SetGoal()));
   }
 }
