@@ -250,7 +250,7 @@ class _SetWeightGoalWidgetState extends State<SetWeightGoalWidget> {
     user = userProvider.user;
     weightgoal = user.basicData.weight;
     user.goal.targetWeight = weightgoal;
-//    print(user.helthData.idealWeightRange);
+//    print(user.healthData.idealWeightRange);
     super.initState();
   }
 
