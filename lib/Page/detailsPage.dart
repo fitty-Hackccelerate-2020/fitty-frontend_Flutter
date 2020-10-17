@@ -472,10 +472,10 @@ class _DetailsPageState extends State<DetailsPage> {
 //    double bmi = double.parse(responseData['data']['bmi']);
 //    d=double.parse(responseData['data']['bmi']);
     print(responseData['data']['bmi'].runtimeType);
-    user.helthData.BMI = double.parse(responseData['data']['bmi'].toString());
+    user.healthData.BMI = double.parse(responseData['data']['bmi'].toString());
     print(responseData['data']['weightRange'][0].runtimeType);
     print(responseData['data']['bmi']);
-    user.helthData.idealWeightRange = responseData['data']['weightRange'];
+    user.healthData.idealWeightRange = responseData['data']['weightRange'];
 
     Navigator.of(context)
         .pushReplacement(MaterialPageRoute(builder: (context) => SetGoal()));
