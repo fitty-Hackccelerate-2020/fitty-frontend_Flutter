@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:fitty/Page/AuthPage/signup.dart';
 import 'package:fitty/Page/Dashboard/dashboard.dart';
+import 'package:fitty/models/user.dart';
 import 'package:fitty/services/auth.dart';
 import 'package:fitty/services/user_provider.dart';
 import 'package:fitty/utils/AppUrl.dart';
@@ -152,6 +153,10 @@ class LoginPage extends StatelessWidget {
       print("error");
     }
     else if(authProvider.authStatus == Status.LoggedIn && response['status']){
+      User loggedInUser = response['user'];
+      /// user is saved to provider after login successfully....
+      UserProvider userProvider =  Provider.of<UserProvider>(context, listen: false);
+      userProvider.setUser(loggedInUser);
       Navigator.push(context, MaterialPageRoute(builder:
         (context) => DashBoardPage()));
       print('login success');
