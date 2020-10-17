@@ -1,4 +1,8 @@
+import '../../Page/AuthPage/login.dart';
+import '../../services/auth.dart';
+import '../../utils/shared_preference.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
   @override
@@ -13,7 +17,7 @@ class ProfilePage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.all(10),
               ),
-              _otherDetailsCard(),
+              _otherDetailsCard(context),
             ],
           ),
         ),
@@ -43,7 +47,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  _otherDetailsCard() {
+  _otherDetailsCard(BuildContext context) {
     return Card(
       elevation: 3,
       color: Colors.blue[50],
@@ -52,7 +56,7 @@ class ProfilePage extends StatelessWidget {
           children: <Widget>[
             _bodyDetaildTile(),
             _settingsTile(),
-            _logOutTile()
+            _logOutTile(context)
           ],
         ),
       ),
@@ -80,14 +84,28 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  _logOutTile() {
+  _logOutTile(BuildContext context) {
     return Container(
       child: ListTile(
         leading: Icon(Icons.power_settings_new, color: Colors.red),
         title: Text('Logout',),
         // subtitle: Text('Height, Weight, Age, Gender, Activity-level'),
+        onTap: () {
+          _logoutAction(context);
+        }
       ),
     );
   }
 
+  _logoutAction(BuildContext context){
+    UserPreferences().removeUser();
+    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+    authProvider.logOut();
+    print("Sign-out");
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:
+        (context) => LoginPage()), (route) => false);
+  }
+
 }
+
+

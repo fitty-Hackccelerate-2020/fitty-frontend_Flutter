@@ -1,3 +1,4 @@
+import 'waterModel.dart';
 import 'basicDataModel.dart';
 import 'goalModel.dart';
 import 'healthDataModel.dart';
@@ -6,7 +7,8 @@ class User{
   String token;
   String fullName;
   BasicData basicData;
-  HealthData helthData;
+  HealthData healthData;
+  WaterData waterData;
   Goal goal;
 
   User({this.token});
@@ -23,9 +25,15 @@ class User{
       height: responseData['height'], activityFreq: responseData['activityFrequency']
     );
 
-    user.helthData = HealthData(
+    user.healthData = HealthData(
       BMI: responseData['bmi'],
       idealWeightRange: responseData['weightRange']
+    );
+
+    if(responseData['water'] == null)
+    user.waterData = WaterData(
+      // current: responseData['water']['current']??0,
+      // target: responseData['water']['target']??0
     );
 
     user.goal = Goal(

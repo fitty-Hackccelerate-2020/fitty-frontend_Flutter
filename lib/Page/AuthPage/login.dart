@@ -158,7 +158,7 @@ class LoginPage extends StatelessWidget {
       UserProvider userProvider =  Provider.of<UserProvider>(context, listen: false);
       userProvider.setUser(loggedInUser);
       Navigator.push(context, MaterialPageRoute(builder:
-        (context) => DashBoardPage()));
+        (context) => NavigationPage()));
       print('login success');
     }
     else{
