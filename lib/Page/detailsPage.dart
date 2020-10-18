@@ -482,7 +482,7 @@ class _DetailsPageState extends State<DetailsPage> {
 
       'full_name': _nameController.text,
       'weight': double.parse(_weightController.text),
-      'height': double.parse(_heightController.text),
+      'height': tempheight,
       'age': int.parse(_ageController.text),
       'gender': _genderselect == 0 ? 'M' : 'F',
       'token': user.token,
@@ -515,7 +515,7 @@ class _DetailsPageState extends State<DetailsPage> {
       BasicData basicData = BasicData(
         age: int.parse(_ageController.text),
         weight: double.parse(_weightController.text),
-        height: double.parse(_heightController.text)/100,
+        height: tempheight,
         activityFreq: activityVal.value,
         gender: _genderselect == 0 ? "M" : "F"
       );
