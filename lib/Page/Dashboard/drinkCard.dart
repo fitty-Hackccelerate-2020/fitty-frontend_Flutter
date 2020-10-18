@@ -49,25 +49,44 @@ class DrinkCard extends StatelessWidget {
     seriesList = _createGuageData(context);
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    return InkWell(
-      onTap: () {
-        print('tapped');
-        if(isDashBoard)
-          Navigator.push(context, MaterialPageRoute(
-              builder: (context) => DrinkingDetails(context, seriesList)));
-      },
-      child: Container(
-        child: Card(
-          color: Colors.blue,
-          child: Container(
-            width: width / 3 - 15,
-            height: 150,
+    return Container(
+      child: Card(
+        color: Colors.blue,
+        child: Container(
+          width: width / 3 - 15,
+          height: 170,
+          child: InkWell(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => DrinkingDetails(context, seriesList)));
+            },
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Container(
-                  child: GuageChartWidget(seriesList, percentage, 38,
-                      height: 150, fontSize: 15, stroke: 4.0),
-                )
+                  padding: EdgeInsets.only(top: 10),
+                  child: Text("Water consumption"),
+                ),
+                Stack(
+                  alignment: Alignment.topCenter,
+                  children: <Widget>[
+                    Container(
+                      child: GuageChartWidget(seriesList, percentage, 38,
+                          height: 130, fontSize: 15, stroke: 4.0),
+                    ),
+                    Container(
+                      width: width / 3 - 15,
+                      height: 140,
+                      child: InkWell(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => DrinkingDetails(context, seriesList)));
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+
               ],
             ),
           ),
