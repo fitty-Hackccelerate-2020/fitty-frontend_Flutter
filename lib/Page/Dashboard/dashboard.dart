@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 import 'CaloriesBurnt.dart';
+import 'CaloriesCount.dart';
 import 'ManageSleep.dart';
 
 class NavigationPage extends StatefulWidget {
@@ -17,7 +18,9 @@ class NavigationPage extends StatefulWidget {
 }
 
 class _NavigationPageState extends State<NavigationPage> {
-  var width, height, index = 0;
+  var width,
+      height,
+      index = 0;
 
   List<Widget> _navList = [
     DashBoardPage(),
@@ -33,10 +36,16 @@ class _NavigationPageState extends State<NavigationPage> {
 
   @override
   Widget build(BuildContext context) {
-    width = MediaQuery.of(context).size.width;
-    height = MediaQuery.of(context).size.height;
+    width = MediaQuery
+        .of(context)
+        .size
+        .width;
+    height = MediaQuery
+        .of(context)
+        .size
+        .height;
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         return false;
       },
       child: SafeArea(
@@ -45,16 +54,19 @@ class _NavigationPageState extends State<NavigationPage> {
           bottomNavigationBar: BottomNavigationBar(
             items: [
               BottomNavigationBarItem(
-                icon: Image.asset('assets/nav/home.png',height: 22,width: 22,),
-                title: Text('Home')
+                  icon: Image.asset(
+                    'assets/nav/home.png', height: 22, width: 22,),
+                  title: Text('Home')
               ),
               BottomNavigationBarItem(
-                icon: Image.asset('assets/nav/history.png',height: 22,width: 22,),
-                title: Text('History')
+                  icon: Image.asset(
+                    'assets/nav/history.png', height: 22, width: 22,),
+                  title: Text('History')
               ),
               BottomNavigationBarItem(
-                icon: Image.asset('assets/nav/profile.png',height: 22,width: 22,),
-                title: Text('Profile')
+                  icon: Image.asset(
+                    'assets/nav/profile.png', height: 22, width: 22,),
+                  title: Text('Profile')
               ),
 
             ],
@@ -74,9 +86,16 @@ class DashBoardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    width = MediaQuery.of(context).size.width;
-    height = MediaQuery.of(context).size.height;
-    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    width = MediaQuery
+        .of(context)
+        .size
+        .width;
+    height = MediaQuery
+        .of(context)
+        .size
+        .height;
+    UserProvider userProvider = Provider.of<UserProvider>(
+        context, listen: false);
     user = userProvider.user;
     print(user.dailyData.caloriesToConsume ?? -1);
     return SingleChildScrollView(
@@ -89,7 +108,7 @@ class DashBoardPage extends StatelessWidget {
     );
   }
 
-  _greetingSection(context){
+  _greetingSection(context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       height: height / 8,
@@ -104,7 +123,7 @@ class DashBoardPage extends StatelessWidget {
               Image.asset('assets/avatar-man.png'),
               Text("Hello, ${user.fullName}", style: TextStyle(fontSize: 20)),
 //              Icon(Icons.pie_chart)
-            _rewardsButton(context)
+              _rewardsButton(context)
             ],
           )
         ],
@@ -112,14 +131,14 @@ class DashBoardPage extends StatelessWidget {
     );
   }
 
-  _mainInfo(BuildContext context){
+  _mainInfo(BuildContext context) {
     return Container(
       width: width,
       color: Colors.white,
       // height: height - height / 8,
       child: Column(
         children: <Widget>[
-          _eatCard(),
+          _eatCard(context),
           _groupCard(context),
           _weekAnalyse(),
         ],
@@ -127,58 +146,70 @@ class DashBoardPage extends StatelessWidget {
     );
   }
 
-  _eatCard() {
+  _eatCard(context) {
     return Container(
       padding: EdgeInsets.all(10),
       child: Card(
         // color: Colors.blue,
-        child: Container(
-          // margin: EdgeInsets.all(10),
-          // color: Colors.pinkAccent,
-          // padding: EdgeInsets.all(20),
-          height: height / 4,
-          child: Row(
-            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            // crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                width: width / 2 - 15,
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      child: Image.asset('assets/cal.png',height: 80,width: 80,),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: Container(
-                        child: Text
-                          ("Daily Calories",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),)
+        child: InkWell(
+          onTap: () {
+            Navigator
+                .of(context)
+                .pushReplacement(MaterialPageRoute(
+                builder: (context) => CaloriesCount()));
+            },
+          child: Container(
+            // margin: EdgeInsets.all(10),
+            // color: Colors.pinkAccent,
+            // padding: EdgeInsets.all(20),
+            height: height / 4,
+            child: Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: width / 2 - 15,
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        child: Image.asset(
+                          'assets/cal.png', height: 80, width: 80,),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        child: Text("${user.dailyData.caloriesConsumed ?? -1}/${user.dailyData.caloriesToConsume}",style: TextStyle(fontSize: 15),),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Container(
+                            child: Text
+                              ("Daily Calories", style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w500),)
+                        ),
                       ),
-                    )
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          child: Text(
+                            "${user.dailyData.caloriesConsumed ?? -1}/${user
+                                .dailyData.caloriesToConsume}",
+                            style: TextStyle(fontSize: 15),),
+                        ),
+                      )
 
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                color: Colors.grey,
-                width: 2,
-                height: height/4 - 30,
-              ),
-              Container(
-                width: width / 2 - 15,
-                child: Column(
-                  children: <Widget>[
-
-                  ],
+                Container(
+                  color: Colors.grey,
+                  width: 2,
+                  height: height / 4 - 30,
                 ),
-              )
-            ],
+                Container(
+                  width: width / 2 - 15,
+                  child: Column(
+                    children: <Widget>[
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -198,12 +229,13 @@ class DashBoardPage extends StatelessWidget {
     );
   }
 
-  _sleepingCard(BuildContext context){
+  _sleepingCard(BuildContext context) {
     return Card(
       color: Colors.blueGrey,
       child: InkWell(
-        onTap: (){
-          Navigator.of(context).push(new MaterialPageRoute(builder:(context)=>ManageSleep()));
+        onTap: () {
+          Navigator.of(context).push(
+              new MaterialPageRoute(builder: (context) => ManageSleep()));
         },
         child: Container(
           width: width / 3 - 15,
@@ -213,20 +245,27 @@ class DashBoardPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  child: Image.asset('assets/sleep.png',height: 60,width: 60,),
+                  child: Image.asset(
+                    'assets/sleep.png', height: 60, width: 60,),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top:20.0),
+                padding: const EdgeInsets.only(top: 20.0),
                 child: Container(
-                  child: Text("Daily Sleep",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 12,color: Colors.white),),
+                  child: Text("Daily Sleep", style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 12,
+                      color: Colors.white),),
 
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  child: Text("${user.sleep.sleepAt}:${user.sleep.wokeupAt} Hours",style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white),),
+                  child: Text(
+                    "${user.sleep.sleepAt}:${user.sleep.wokeupAt} Hours",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w300, color: Colors.white),),
                 ),
               )
             ],
@@ -236,12 +275,13 @@ class DashBoardPage extends StatelessWidget {
     );
   }
 
-  _workOutCard(BuildContext context){
+  _workOutCard(BuildContext context) {
     return Card(
       color: Colors.red[300],
       child: InkWell(
-        onTap: (){
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>CaloriesBurnt()));
+        onTap: () {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => CaloriesBurnt()));
         },
         child: Container(
           width: width / 3 - 15,
@@ -251,20 +291,25 @@ class DashBoardPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  child: Image.asset('assets/workout.png',height: 60,width: 60,),
+                  child: Image.asset(
+                    'assets/workout.png', height: 60, width: 60,),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top:20.0),
+                padding: const EdgeInsets.only(top: 20.0),
                 child: Container(
-                  child: Text("Burnt Calories",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 12,color: Colors.white),),
+                  child: Text("Burnt Calories", style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 12,
+                      color: Colors.white),),
 
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  child: Text("293 Cal",style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white),),
+                  child: Text("293 Cal", style: TextStyle(
+                      fontWeight: FontWeight.w300, color: Colors.white),),
                 ),
               )
             ],
@@ -289,28 +334,28 @@ class DashBoardPage extends StatelessWidget {
     );
   }
 
-  _title(){
+  _title() {
     return Container(
         child: Text("Weekly Calories Gain")
     );
   }
 
-  _barChartData(){
+  _barChartData() {
     return Container(
       height: 300,
       color: Colors.blue,
     );
   }
 
-  _footNote(){
+  _footNote() {
     return Container(
       child: Text('Addition FootNote Data'),
     );
   }
 
-  _rewardsButton(BuildContext context){
+  _rewardsButton(BuildContext context) {
     return IconButton(
-      onPressed: () async{
+      onPressed: () async {
         print("rewards button pressed");
       },
       icon: Icon(Icons.flag),
