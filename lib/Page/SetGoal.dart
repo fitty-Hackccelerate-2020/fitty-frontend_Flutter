@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:fitty/Page/Dashboard/dashboard.dart';
+import 'package:fitty/models/DailyData.dart';
 import 'package:fitty/models/goalModel.dart';
 import 'package:fitty/models/user.dart';
 import 'package:fitty/services/user_provider.dart';
@@ -220,10 +221,12 @@ class _WeightSummaryState extends State<WeightSummary> {
       {
         if(responseData['error']==false)
           {
-            user.goal = Goal(
-              targetWeight: responseData['data']['goalWeight'],
-              targetWeightPerWeek: responseData['data']['perWeekWeightGoal']
+            print('goal - data: ${responseData['data']}');
+            user.dailyData = DailyData(
+              caloriesConsumed: responseData['data']['caloriesConsumed'],
+              caloriesToConsume: responseData['data']['caloriesToConsume']
             );
+
             // user = User.fromJson(responseData['data'], token: user.token, preUser: user);
             if(widget.flagvar==false){
                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>NavigationPage()));
