@@ -270,7 +270,7 @@ class _DetailsPageState extends State<DetailsPage> {
                   child: ListTile(
                     leading: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Image.asset("assets/weight.png"),
+                      child: Image.asset("assets/wheight.png"),
                     ),
                     title: TextFormField(
                       controller: _weightController,
