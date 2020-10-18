@@ -1,16 +1,14 @@
-# fitty
+# Fitty - Health and Fitness App
+<b> Get the App from Play-store</b>
 
-A new Flutter application.
+<a href="https://play.google.com/store/apps/details?id=hackathon.fitty&hl=en_US"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height=60px /></a> <p>
 
-## Getting Started
+* [ For Detailed Information about fitty app](https://drive.google.com/file/d/1Ga4FiSnWThEvYHpJrgBCO_vgp5-LRDP3/view?usp=sharing)
 
-This project is a starting point for a Flutter application.
+1. login & registration Flow-Images :
+  ![login & registration](https://drive.google.com/uc?export=view&id=1uVuwzWmCYqwjb2obEODXn8LAAiURPby0)
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+2. dashboard & profile pages
+  ![dashboard & profile pages](https://drive.google.com/uc?export=view&id=1WW0PpMx6e2b0nrufXjYjjP6JGqkHLi3V)
+  
+  
