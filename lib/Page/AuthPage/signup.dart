@@ -147,13 +147,14 @@ class SignUpPage extends StatelessWidget {
     Map<String, dynamic> response = await authProvider.register(email.text, password.text, fullName.text);
     if(response['status'] && authProvider.authStatus == Status.LoggedIn) {
       print('Register success');
+      print(response['user']);
       User registeredUser = response['user'];
       UserProvider userProvider =  Provider.of<UserProvider>(context, listen: false);
       userProvider.setUser(registeredUser);
 
       print('checking-token');
       print(registeredUser.token);
-      // print(userProvider.user.token);
+       print(userProvider.user.token);
 
       Navigator.push(context, MaterialPageRoute(builder:
         (context) => DetailsPage(flagvar: false,)));

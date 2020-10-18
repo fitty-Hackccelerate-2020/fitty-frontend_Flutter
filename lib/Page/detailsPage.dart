@@ -499,10 +499,10 @@ class _DetailsPageState extends State<DetailsPage> {
     /*update respose data*/
 //    double bmi = double.parse(responseData['data']['bmi']);
 //    d=double.parse(responseData['data']['bmi']);
-    print(responseData['data']['bmi'].runtimeType);
+//    print(responseData['data']['bmi'].runtimeType);
     user.healthData.BMI = double.parse(responseData['data']['bmi'].toString());
     print(responseData['data']['weightRange'][0].runtimeType);
-    print(responseData['data']['bmi']);
+//    print(responseData['data']['bmi']);
     user.healthData.idealWeightRange = responseData['data']['weightRange'];
     if(widget.flagvar==false)
     {

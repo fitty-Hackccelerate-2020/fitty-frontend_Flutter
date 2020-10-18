@@ -20,7 +20,7 @@ class User{
     this.dailyData, this.diet, this.sleep, this.workOut, this.goal});
 
   factory User.fromJson(Map<String, dynamic> responseData) {
-    // print(" token = ${responseData['data']}");
+     print(" token = ${responseData['data']}");
 
     User user = User(token: responseData['data'] ?? null);
     user.token = responseData['token'] ?? null;
