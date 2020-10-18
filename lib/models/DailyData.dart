@@ -33,5 +33,5 @@ class WorkOut
   String workoutName;
   int caloriesBurnt;
 
-  WorkOut({this.workoutName,this.caloriesBurnt});
+  WorkOut({this.workoutName,this.caloriesBurnt = 0});
 }

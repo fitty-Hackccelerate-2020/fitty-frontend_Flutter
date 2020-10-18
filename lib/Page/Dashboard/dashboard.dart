@@ -1,6 +1,5 @@
 import 'package:fitty/models/user.dart';
 import 'package:fitty/services/user_provider.dart';
-
 import '../../Page/Dashboard/DrinkingDeatils.dart';
 import '../../Page/Profile/profile.dart';
 import 'package:flutter/material.dart';
@@ -71,8 +70,9 @@ class DashBoardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    user = Provider.of<UserProvider>(context, listen: false).user;
-    // print(user.dailyData.caloriesToConsume);
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    user = userProvider.user;
+    // print(user.fullName);
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -152,7 +152,7 @@ class DashBoardPage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                        child: Text("1200/1500",style: TextStyle(fontSize: 15),),
+                        child: Text("${0}/${0}",style: TextStyle(fontSize: 15),),
                       ),
                     )
 

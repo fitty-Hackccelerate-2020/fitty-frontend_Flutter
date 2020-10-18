@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:fitty/Page/Dashboard/dashboard.dart';
+import 'package:fitty/models/goalModel.dart';
 import 'package:fitty/models/user.dart';
 import 'package:fitty/services/user_provider.dart';
 import 'package:fitty/utils/AppUrl.dart';
@@ -67,14 +68,14 @@ class _WeightSummaryState extends State<WeightSummary> {
     if (user.healthData.BMI < 18.5) {
       ConditionAccordingBMI = "Underweight";
       Suggestion =
-      'According To BMI Your Weight Too Low You Should Increase Your Weight';
+      'According To BMI Your Weight is Low. You Should Increase Your Weight';
       WeightText = Text(
         "Underweight",
         style: TextStyle(color: Colors.yellowAccent, fontSize: 20),
       );
     } else if (user.healthData.BMI >= 18.5 && user.healthData.BMI <= 24.9) {
       Suggestion =
-      'According To BMI Your Weight Is Normal You Should Keep Maintain Your Weight';
+      'According To BMI Your Weight Is Normal. You Should Keep Maintain Your Weight';
       ConditionAccordingBMI = 'Normal';
       WeightText = Text(
         "Normal",
@@ -82,7 +83,7 @@ class _WeightSummaryState extends State<WeightSummary> {
       );
     } else if (user.healthData.BMI >= 25 && user.healthData.BMI <= 29.0) {
       Suggestion =
-      'According To BMI You are Slightly Overweight You Should Lose Your Weight';
+      'According To BMI You are Overweight. You Should Lose Your Weight';
       ConditionAccordingBMI = 'OverWeight';
       WeightText = Text(
         "OverWeight",
@@ -189,50 +190,51 @@ class _WeightSummaryState extends State<WeightSummary> {
   UpdateData(context) async {
     print(user.token);
     Map<String, dynamic> result;
-
-
-
-   if(weighlossgoal=='Set Goal Level')
-     {
+    if(weighlossgoal=='Set Goal Level') {
        Fluttertoast.showToast(msg: "Please Set Your Goal Speed",toastLength: Toast.LENGTH_LONG);
-     }
-     else{
-       print(weighlossgoal);
-       print("${user.goal.targetWeightPerWeek}");
-       print("${user.goal.targetWeight}");
+    }
+    else{
+      print(weighlossgoal);
+      print("${user.goal.targetWeightPerWeek}");
+      print("${user.goal.targetWeight}");
 
-     final Map<String, dynamic> UpdateGoalData = {
-     'goalWeight': user.goal.targetWeight,
-     'perWeekWeightGoal'
-    : user.goal.targetWeightPerWeek,
-    'token': user.token,
-    };
-    Fluttertoast.showToast(
-    msg: "Please Wait Data is Loading", toastLength: Toast.LENGTH_LONG);
-    Response response = await post(AppUrl.updateGoalData,
-    body: jsonEncode(UpdateGoalData),
-    headers: {'Content-Type': 'application/json; charset=UTF-8'});
+      final Map<String, dynamic> UpdateGoalData = {
+        'goalWeight': user.goal.targetWeight,
+        'perWeekWeightGoal': user.goal.targetWeightPerWeek,
+        'token': user.token
+      };
 
-    print(response.statusCode);
-    var responseData = json.decode(response.body);
-    print(responseData);
-    if(response.statusCode==200 )
+      Fluttertoast.showToast(
+          msg: "Please Wait Data is Loading", toastLength: Toast.LENGTH_LONG);
+
+      Response response = await post(
+          AppUrl.updateGoalData,
+          body: jsonEncode(UpdateGoalData),
+          headers: {'Content-Type': 'application/json; charset=UTF-8'}
+      );
+
+      print(response.statusCode);
+      var responseData = jsonDecode(response.body);
+      print(responseData);
+      if(response.statusCode==200 )
       {
         if(responseData['error']==false)
           {
-           if(widget.flagvar==false)
-             {
+            user.goal = Goal(
+              targetWeight: responseData['data']['goalWeight'],
+              targetWeightPerWeek: responseData['data']['perWeekWeightGoal']
+            );
+            // user = User.fromJson(responseData['data'], token: user.token, preUser: user);
+            if(widget.flagvar==false){
                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>NavigationPage()));
-             }
-             else
-               {
-                 Navigator.of(context).pop();
-               }
-          }
-          else
-            {
-              Fluttertoast.showToast(msg: "Something Went Wrong");
             }
+            else{
+              Navigator.of(context).pop();
+            }
+          }
+          else{
+            Fluttertoast.showToast(msg: "Something Went Wrong@setGoal.dart");
+          }
       }
 
 //    Navigator.of(context)
