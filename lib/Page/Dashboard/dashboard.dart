@@ -154,54 +154,61 @@ class DashBoardPage extends StatelessWidget {
         // color: Colors.blue,
         child: InkWell(
           onTap: (){
-
             Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context)=>CaloriesCount()));
           },
           child: Container(
+            width: width,
             // margin: EdgeInsets.all(10),
             // color: Colors.pinkAccent,
             // padding: EdgeInsets.all(20),
-            height: height / 4,
+            height: 200,
             child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              // crossAxisAlignment: CrossAxisAlignment.center,
+              // direction: Axis.horizontal,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Container(
-                  width: width / 2 - 15,
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        child: Image.asset('assets/cal.png',height: 80,width: 80,),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 20),
-                        child: Container(
-                          child: Text
-                            ("Daily Calories",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),)
+                Flexible(
+                  
+                  child: Container(
+                    
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          child: Image.asset('assets/cal.png',height: 80,width: 80,),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          child: Text("${user.dailyData.caloriesConsumed ?? -1}/${user.dailyData.caloriesToConsume}",style: TextStyle(fontSize: 15),),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: Container(
+                            child: Text
+                              ("Daily Calories",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),)
+                          ),
                         ),
-                      )
-
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Container(
+                            child: Text("${user.dailyData.caloriesConsumed ?? -1}/${user.dailyData.caloriesToConsume}",
+                              style: TextStyle(fontSize: 15), textScaleFactor: 1.0),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-                Container(
-                  color: Colors.grey,
-                  width: 2,
-                  height: height/4 - 30,
-                ),
-                Container(
-                  width: width / 2 - 15,
-                  child: Column(
-                    children: <Widget>[
-                      GuageChartWidget(seriesList, percentage + 10, 60,
-                          height: height/4, fontSize: 20, stroke: 6.0, arcLength: 10)
-                    ],
+                // Container(
+                //   color: Colors.grey,
+                //   width: 2,
+                //   height: height/4 - 30,
+                // ),
+                Flexible(
+                  child: Container(
+                    // width: width / 2 - 15,
+                    child: Column(
+                      children: <Widget>[
+                        GuageChartWidget(seriesList, percentage, 60,
+                            height: 180, fontSize: 20, stroke: 6.0, arcLength: 10)
+                      ],
+                    ),
                   ),
                 )
               ],
@@ -214,12 +221,18 @@ class DashBoardPage extends StatelessWidget {
 
   _groupCard(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
+      // padding: EdgeInsets.all(10),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           DrinkCard(isDashBoard: true),
-          _sleepingCard(context),
-          _workOutCard(context)
+          Wrap(
+            direction: Axis.vertical,
+            children: <Widget>[
+              _sleepingCard(context),
+              _workOutCard(context)
+            ],
+          )
         ],
       ),
     );
@@ -233,7 +246,7 @@ class DashBoardPage extends StatelessWidget {
           Navigator.of(context).push(new MaterialPageRoute(builder:(context)=>ManageSleep()));
         },
         child: Container(
-          width: width / 3 - 15,
+          width: width / 2.5,
           height: 170,
           child: Column(
             children: [
@@ -271,7 +284,7 @@ class DashBoardPage extends StatelessWidget {
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>CaloriesBurnt()));
         },
         child: Container(
-          width: width / 3 - 15,
+          width: width / 2.5,
           height: 170,
           child: Column(
             children: [

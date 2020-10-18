@@ -6,6 +6,7 @@ import 'package:fitty/models/goalModel.dart';
 import 'package:fitty/models/user.dart';
 import 'package:fitty/services/user_provider.dart';
 import 'package:fitty/utils/AppUrl.dart';
+import 'package:fitty/utils/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
@@ -195,6 +196,7 @@ class _WeightSummaryState extends State<WeightSummary> {
        Fluttertoast.showToast(msg: "Please Set Your Goal Speed",toastLength: Toast.LENGTH_LONG);
     }
     else{
+      loading(context, title: "Creating Your Profile &\nSetting Your Goal");
       print(weighlossgoal);
       print("${user.goal.targetWeightPerWeek}");
       print("${user.goal.targetWeight}");
@@ -206,7 +208,8 @@ class _WeightSummaryState extends State<WeightSummary> {
       };
 
       Fluttertoast.showToast(
-          msg: "Please Wait Data is Loading", toastLength: Toast.LENGTH_LONG);
+          msg: "Don't press back-button", toastLength: Toast.LENGTH_LONG,
+          timeInSecForIosWeb: 2);
 
       Response response = await post(
           AppUrl.updateGoalData,
@@ -217,7 +220,7 @@ class _WeightSummaryState extends State<WeightSummary> {
       print(response.statusCode);
       var responseData = jsonDecode(response.body);
       print(responseData);
-      if(response.statusCode==200 )
+      if(response.statusCode==200)
       {
         if(responseData['error']==false)
           {
@@ -229,9 +232,11 @@ class _WeightSummaryState extends State<WeightSummary> {
 
             // user = User.fromJson(responseData['data'], token: user.token, preUser: user);
             if(widget.flagvar==false){
+              Navigator.pop(context);
                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>NavigationPage()));
             }
             else{
+              Navigator.of(context).pop();
               Navigator.of(context).pop();
             }
           }

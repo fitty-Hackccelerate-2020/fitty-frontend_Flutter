@@ -23,7 +23,7 @@ class LoginPage extends StatelessWidget {
       backgroundColor: Colors.blue[200],
       body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             _preSet(),
             _formLogin(context),
@@ -37,76 +37,84 @@ class LoginPage extends StatelessWidget {
     return Column(
       children: <Widget>[
         /// welcome text / banner / flow of app....
-
         Container(
-          height: height / 2,
-          padding: EdgeInsets.all(5),
-          child: Image.asset('assets/set-your-goals.png', width: width, height: height/2),
+          padding: EdgeInsets.only(top: 40),
+          child: Text('FITTY', textScaleFactor: 1, style: TextStyle(
+            fontSize: 20, fontWeight: FontWeight.bold
+          )),
         ),
-
+        Container(
+          height: height / 3,
+          padding: EdgeInsets.all(5),
+          child: Image.asset('assets/set-your-goals.png', width: width, height: height/5),
+        ),
       ],
     );
   }
 
   _formLogin(BuildContext context){
     return Container(
-      height: height - height / 2,
+      height: height - height / 2.5,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
         border: Border.all(color: Colors.white),
         color: Colors.white
       ),
       // color: Colors.white,
-      child: SingleChildScrollView(
-        child: Column(
-          // mainAxisSize: MainAxisSize.max,
-          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-              child: TextFormField(
-                controller: email,
-                decoration: InputDecoration(
-                  hintText: 'Email',
-                  border: OutlineInputBorder(borderSide: BorderSide())
-                ),
+      child: Column(
+        // mainAxisSize: MainAxisSize.max,
+        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Container(
+            child: Text('Login', textScaleFactor: 1,
+              style: TextStyle(fontSize: 20)),
+            padding: EdgeInsets.symmetric(vertical: 5),
+          ),
+          Container(
+            padding: EdgeInsets.fromLTRB(20, 10, 20, 30),
+            child: TextFormField(
+              controller: email,
+              decoration: InputDecoration(
+                hintText: 'Email',
+                border: OutlineInputBorder(borderSide: BorderSide())
               ),
             ),
-            Container(
-              padding: EdgeInsets.fromLTRB(20, 0, 20, 30),
-              // padding: EdgeInsets.all(10),
-              child: TextFormField(
-                controller: password,
-                decoration: InputDecoration(
-                  hintText: 'Password',
-                  border: OutlineInputBorder(borderSide: BorderSide())
-                ),
+          ),
+          Container(
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 30),
+            // padding: EdgeInsets.all(10),
+            child: TextFormField(
+              controller: password,
+              decoration: InputDecoration(
+                hintText: 'Password',
+                border: OutlineInputBorder(borderSide: BorderSide())
               ),
             ),
-            _submitButton(context),
-            Center(
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 30),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text("Don't have an account ? "),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder:
-                            (context) => SignUpPage()));
-                      },
-                      child: Container(
-                        child: Text('Sign Up',
-                            style: TextStyle(color: Colors.blue[200], fontWeight: FontWeight.bold))
-                      ),
-                    )
-                  ],
-                )
-              ),
-            )
-          ],
-        ),
+          ),
+          _submitButton(context),
+          Center(
+            child: Container(
+              padding: EdgeInsets.only(top: 30),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text("Don't have an account ? "),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder:
+                          (context) => SignUpPage()));
+                    },
+                    child: Container(
+                      child: Text('Sign Up',
+                          style: TextStyle(color: Colors.blue[200], fontWeight: FontWeight.bold))
+                    ),
+                  )
+                ],
+              )
+            ),
+          ),
+
+        ],
       ),
     );
   }
