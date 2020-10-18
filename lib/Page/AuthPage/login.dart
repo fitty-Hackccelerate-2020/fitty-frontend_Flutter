@@ -6,11 +6,13 @@ import 'package:fitty/services/auth.dart';
 import 'package:fitty/services/user_provider.dart';
 import 'package:fitty/utils/AppUrl.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
   var width, height;
+  final _formkey = GlobalKey<FormState>();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
 
@@ -19,15 +21,18 @@ class LoginPage extends StatelessWidget {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      backgroundColor: Colors.blue[200],
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            _preSet(),
-            _formLogin(context),
-          ],
+    return Form(
+      key: _formkey,
+      child: Scaffold(
+        backgroundColor: Colors.blue[200],
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              _preSet(),
+              _formLogin(context),
+            ],
+          ),
         ),
       ),
     );
@@ -74,6 +79,17 @@ class LoginPage extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(20, 10, 20, 30),
             child: TextFormField(
               controller: email,
+              validator:(value){
+                if(value.isEmpty||validateEmail(email.text))
+                  {
+                    print("Emial $email");
+                    return "Invalid Email";
+                  }
+                  else
+                    {
+                      return null;
+                    }
+              } ,
               decoration: InputDecoration(
                 hintText: 'Email',
                 border: OutlineInputBorder(borderSide: BorderSide())
@@ -85,8 +101,20 @@ class LoginPage extends StatelessWidget {
             // padding: EdgeInsets.all(10),
             child: TextFormField(
               controller: password,
+              obscureText: true,
+              validator: (value){
+                if(value.isEmpty==true||value.length<6)
+                  {
+                    return "Password Must be Greater Than 6";
+                  }
+                  else
+                    {
+                      return null;
+                    }
+              },
               decoration: InputDecoration(
                 hintText: 'Password',
+
                 border: OutlineInputBorder(borderSide: BorderSide())
               ),
             ),
@@ -124,7 +152,17 @@ class LoginPage extends StatelessWidget {
       child: RaisedButton(
         color: Colors.blue[200],
         shape: StadiumBorder(),
-        onPressed:() => _loginRequest(context),
+        onPressed:() {
+          if(_formkey.currentState.validate())
+            {
+              Fluttertoast.showToast(msg: "Loading");
+              return _loginRequest(context);
+            }
+            else
+              {
+                Fluttertoast.showToast(msg: "Something Went Wrong");
+              }
+        },
           /// seperate flow for APIs....
 
           // var cred = jsonEncode({'email':'mayursiinh@gmail.com','password': 'fo'});
@@ -157,21 +195,36 @@ class LoginPage extends StatelessWidget {
     if(response == null){
       authProvider.logOut();
       print("error");
+      Fluttertoast.showToast(msg: "Something Went Wrong");
     }
     else if(authProvider.authStatus == Status.LoggedIn && response['status']){
-      User loggedInUser = response['user'];
-      /// user is saved to provider after login successfully....
-      UserProvider userProvider =  Provider.of<UserProvider>(context, listen: false);
-      userProvider.setUser(loggedInUser);
-      Navigator.push(context, MaterialPageRoute(builder:
-        (context) => InitalizeDashboard()
-      ));
-      print('login success');
+
+         User loggedInUser = response['user'];
+         /// user is saved to provider after login successfully....
+         UserProvider userProvider =  Provider.of<UserProvider>(context, listen: false);
+         userProvider.setUser(loggedInUser);
+         Navigator.push(context, MaterialPageRoute(builder:
+             (context) => InitalizeDashboard()
+         ));
+         Fluttertoast.showToast(msg: "Loading Data");
+         print('login success');
+
     }
     else{
       print(authProvider.authStatus);
       print(response['message']);
+      Fluttertoast.showToast(msg: "Please Register");
     }
     print("exit");
+  }
+  validateEmail(String value) {
+    print("This $value");
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(value))
+      return true;
+    else
+      return false;
   }
 }
