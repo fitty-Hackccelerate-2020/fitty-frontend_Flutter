@@ -43,24 +43,24 @@ class GuageChartWidget extends StatelessWidget {
           child: Stack(
             alignment: Alignment.bottomCenter,
             children: <Widget>[
-              if(height == 200)
-                Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  IconButton(
-                    onPressed: (){
-
-                    },
-                    icon: Icon(Icons.remove, color: Colors.red),
-                  ),
-                  IconButton(
-                    onPressed: (){
-
-                    },
-                    icon: Icon(Icons.add, color: Colors.green),
-                  ),
-                ],
-              ),
+              // if(height == 200)
+              //   Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //   children: <Widget>[
+              //     IconButton(
+              //       onPressed: (){
+              //
+              //       },
+              //       icon: Icon(Icons.remove, color: Colors.red),
+              //     ),
+              //     IconButton(
+              //       onPressed: (){
+              //
+              //       },
+              //       icon: Icon(Icons.add, color: Colors.green),
+              //     ),
+              //   ],
+              // ),
               Center(
                   child: CustomPaint(painter: DrawCircle(radius, stroke))
               ),
@@ -117,7 +117,7 @@ class GaugeSegment {
 
   final String segment;
   final double size;
-  final charts.Color color = charts.Color(r: 104, g: 240, b: 174);
+  final charts.Color color = charts.Color(r: 100, g: 150, b: 200);
 
   GaugeSegment(this.segment, this.size);
 }

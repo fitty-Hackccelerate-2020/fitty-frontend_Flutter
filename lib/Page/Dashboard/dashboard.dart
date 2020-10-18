@@ -51,6 +51,7 @@ class _NavigationPageState extends State<NavigationPage> {
         child: Scaffold(
           backgroundColor: Colors.blue[100],
           appBar: AppBar(
+            automaticallyImplyLeading: false,
             backgroundColor: Colors.blue[100],
             centerTitle: false,
             title: Text("Fitty", style:
@@ -145,7 +146,7 @@ class DashBoardPage extends StatelessWidget {
 
   _eatCard(BuildContext context) {
     double percentage = user.dailyData.caloriesConsumed/user.dailyData.caloriesToConsume * 100;
-    List<charts.Series> seriesList = _createGuageData(context, percentage + 10);
+    List<charts.Series> seriesList = _createGuageData(context, percentage );
    print("height");
     print(height/4);
     return Container(
@@ -164,13 +165,11 @@ class DashBoardPage extends StatelessWidget {
             height: 200,
             child: Row(
               // direction: Axis.horizontal,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Flexible(
-                  
                   child: Container(
-                    
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -205,12 +204,13 @@ class DashBoardPage extends StatelessWidget {
                     // width: width / 2 - 15,
                     child: Column(
                       children: <Widget>[
-                        GuageChartWidget(seriesList, percentage, 60,
-                            height: 180, fontSize: 20, stroke: 6.0, arcLength: 10)
+                        GuageChartWidget(seriesList, percentage % 101, 58,
+                            height: 195, fontSize: 20, stroke: 6.0, arcLength: 10)
                       ],
                     ),
                   ),
-                )
+                ),
+                /// for acchieving target
               ],
             ),
           ),
@@ -225,7 +225,7 @@ class DashBoardPage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          DrinkCard(isDashBoard: true),
+          DrinkCard(context, isDashBoard: true),
           Wrap(
             direction: Axis.vertical,
             children: <Widget>[

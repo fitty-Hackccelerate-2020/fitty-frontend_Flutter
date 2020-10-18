@@ -292,7 +292,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         msg:
                         "Please Update Data and Select Your Activity Level");
                   } else {
-                    loading(context, title: 'Calculating your BMI (Body Mass Index)...');
+                    loading(context, title: 'Calculating your BMI');
                     UpdateDetails(context);
                   }
                   //                  Navigator.of(context).push(MaterialPageRoute(builder:(context)=>SetGoal()));
