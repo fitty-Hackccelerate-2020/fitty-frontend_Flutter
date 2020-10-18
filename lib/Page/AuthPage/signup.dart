@@ -153,7 +153,7 @@ class SignUpPage extends StatelessWidget {
 
       print('checking-token');
       print(registeredUser.token);
-      // print(userProvider.user.token);
+      // print(userProvider.user.dailyData.caloriesToConsume);
 
       Navigator.push(context, MaterialPageRoute(builder:
         (context) => DetailsPage(flagvar: false,)));

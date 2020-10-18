@@ -86,7 +86,7 @@ class DrinkingDetails {
         ),
         Container(
           height: 200,
-          color: Colors.pinkAccent,
+          // color: Colors.pinkAccent,
           child: Center(
               child: Stack(
                 children: <Widget>[
@@ -187,7 +187,7 @@ class GaugeChart extends StatelessWidget {
   /// Create one series with sample hard coded data.
   static List<charts.Series<GaugeSegment, String>> _createSampleData() {
     final data = [
-      new GaugeSegment('Low', 90),
+      new GaugeSegment('Low', 90, ),
       // new GaugeSegment('Acceptable', 100),
       // new GaugeSegment('High', 50),
       // new GaugeSegment('Highly Unusual', 95),

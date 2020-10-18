@@ -67,7 +67,7 @@ class AuthProvider with ChangeNotifier {
 
     final Map<String, dynamic> responseData = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      _user = User.fromJson(responseData);
+      _user = User(token: responseData['data']);
       await UserPreferences().saveUser(_user);
       _loggedInStatus = Status.LoggedIn;
       notifyListeners();
@@ -110,8 +110,7 @@ class AuthProvider with ChangeNotifier {
      }
     Map<String, dynamic> responseData = jsonDecode(response.body);
     if(response.statusCode == 200){
-      _user = User.fromJson(responseData);
-      print(User.fromJson(responseData).token);
+      _user = User(token: responseData['data']);
 
       print(_user);
       _loggedInStatus = Status.LoggedIn;

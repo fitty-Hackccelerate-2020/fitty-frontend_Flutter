@@ -1,6 +1,11 @@
 import 'dart:convert';
 
 import 'package:fitty/Page/SetGoal.dart';
+import 'package:fitty/models/DailyData.dart';
+import 'package:fitty/models/basicDataModel.dart';
+import 'package:fitty/models/goalModel.dart';
+import 'package:fitty/models/healthDataModel.dart';
+import 'package:fitty/models/waterModel.dart';
 import 'package:fitty/services/user_provider.dart';
 import 'package:fitty/utils/AppUrl.dart';
 import 'package:flutter/material.dart';
@@ -265,7 +270,7 @@ class _DetailsPageState extends State<DetailsPage> {
                   child: ListTile(
                     leading: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Image.asset("assets/wheight.png"),
+                      child: Image.asset("assets/weight.png"),
                     ),
                     title: TextFormField(
                       controller: _weightController,
@@ -465,21 +470,24 @@ class _DetailsPageState extends State<DetailsPage> {
   }
 
   UpdateDetails(context) async {
-    UserProvider userProvider =
-    Provider.of<UserProvider>(context, listen: false);
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     User user = userProvider.user;
 
     print(user.token);
     Map<String, dynamic> result;
     double tempheight = double.parse(_heightController.text) / 100;
     final Map<String, dynamic> UpdateUserData = {
+
+      // 'activityFreq': activityVal.value
+
       'full_name': _nameController.text,
-      'weight': _weightController.text,
-      'height': tempheight,
-      'age': (int.parse(_ageController.text)),
+      'weight': double.parse(_weightController.text),
+      'height': double.parse(_heightController.text),
+      'age': int.parse(_ageController.text),
       'gender': _genderselect == 0 ? 'M' : 'F',
       'token': user.token,
     };
+
     Fluttertoast.showToast(
         msg: "Please Wait Data is Loading", toastLength: Toast.LENGTH_LONG);
     Response response = await post(AppUrl.updateUserData,
@@ -487,32 +495,71 @@ class _DetailsPageState extends State<DetailsPage> {
         headers: {'Content-Type': 'application/json; charset=UTF-8'});
 
     print(response.statusCode);
-    var responseData = json.decode(response.body);
+    var responseData = jsonDecode(response.body);
     print(responseData);
-    user.fullName = _nameController.text;
-    user.basicData.weight = double.parse(_weightController.text);
-    user.basicData.height = double.parse(_heightController.text);
-    user.basicData.age = int.parse(_ageController.text);
-    user.basicData.activityFreq=activityVal.value;
-    user.basicData.gender = _genderselect == 0 ? "Male" : "Female";
 
-    /*update respose data*/
-//    double bmi = double.parse(responseData['data']['bmi']);
-//    d=double.parse(responseData['data']['bmi']);
-    print(responseData['data']['bmi'].runtimeType);
-    user.healthData.BMI = double.parse(responseData['data']['bmi'].toString());
-    print(responseData['data']['weightRange'][0].runtimeType);
-    print(responseData['data']['bmi']);
-    user.healthData.idealWeightRange = responseData['data']['weightRange'];
-    if(widget.flagvar==false)
-    {
+    /// update response data...
+    if(response.statusCode == 200){
+      print("updated W,H,A,Ac,G to server");
+      print('DeatilsPage response = ${responseData}');
 
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) => SetGoal(flagvar: false,)));
+      // user.fullName = UpdateUserData['full_name'];
+      // user.basicData.weight = UpdateUserData['weight'];
+      // user.basicData.height = UpdateUserData['height'];
+      // user.basicData.age = UpdateUserData['age'];
+      // user.basicData.activityFreq = activityVal.value; /// should be UpdateUserData['activityFreq']
+      // user.basicData.gender = UpdateUserData['gender'];
+
+      user.fullName = _nameController.text;
+
+      BasicData basicData = BasicData(
+        age: int.parse(_ageController.text),
+        weight: double.parse(_weightController.text),
+        height: double.parse(_heightController.text),
+        activityFreq: activityVal.value,
+        gender: _genderselect == 0 ? "M" : "F"
+      );
+      user.basicData = basicData;
+
+      HealthData healthData = HealthData(
+        BMI: double.parse(responseData['data']['bmi'].toString()),
+        idealWeightRange: responseData['data']['weightRange']
+      );
+      user.healthData = healthData;
+      user.goal = Goal();
+      user.dailyData = DailyData();
+      // user.healthData.BMI = double.parse(responseData['data']['bmi'].toString());
+      // user.healthData.idealWeightRange = responseData['data']['weightRange'];
+      user.workOut = WorkOut();
+      user.waterData = WaterData();
+      user.sleep = Sleep();
+      user.diet = Diet();
+      // user = User.fromJson(responseData['data'], token: user.token, preUser: user);
+
+      print('updated BMI,Ideal weight range');
+      if(widget.flagvar==false){
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (context) => SetGoal(flagvar: false,)));
+      }
+      else{
+        Navigator.of(context).pop();
+      }
     }
-    else
-    {
-      Navigator.of(context).pop();
+
+    else{
+      print('error @response_detailsPage.UpdateDetails()');
     }
+    // user.fullName = _nameController.text;
+    // user.basicData.weight = double.parse(_weightController.text);
+    // user.basicData.height = double.parse(_heightController.text);
+    // user.basicData.age = int.parse(_ageController.text);
+    // user.basicData.activityFreq=activityVal.value;
+    // user.basicData.gender = _genderselect == 0 ? "M" : "F";
+    //
+    // user.healthData.BMI = double.parse(responseData['data']['bmi'].toString());
+    // print(user.healthData.BMI);
+    // // print(responseData['data']['bmi']);
+    // user.healthData.idealWeightRange = responseData['data']['weightRange'];
+
   }
 }

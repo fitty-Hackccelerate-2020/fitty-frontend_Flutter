@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:fitty/models/DailyData.dart';
 import 'package:fitty/models/basicDataModel.dart';
+import 'package:fitty/models/goalModel.dart';
 import 'package:fitty/models/healthDataModel.dart';
 import 'package:fitty/models/user.dart';
 import 'package:fitty/models/waterModel.dart';
@@ -20,16 +22,17 @@ class InitalizeDashboard extends StatefulWidget {
 
 class _InitalizeDashboardState extends State<InitalizeDashboard> {
   User user;
-
+  UserProvider userProvider;
   @override
   void initState() {
-    // TODO: implement initState
+    userProvider = Provider.of<UserProvider>(context, listen: false);
+    user = userProvider.user;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    user = Provider.of<UserProvider>(context, listen: false).user;
+
     return Scaffold(
       body: FutureBuilder(
         future: GetInitialData(),
@@ -54,7 +57,8 @@ class _InitalizeDashboardState extends State<InitalizeDashboard> {
   }
 
   Future GetInitialData() async {
-    print(user.token);
+    print('getting');
+    // print(user.token);
     Map<String, dynamic> result;
 
     final Map<String, dynamic> DailyGoalData = {
@@ -63,27 +67,69 @@ class _InitalizeDashboardState extends State<InitalizeDashboard> {
 
     Fluttertoast.showToast(
         msg: "Please Wait Data is Loading", toastLength: Toast.LENGTH_LONG);
-    Response response = await post(AppUrl.fetchTodayGoal,
+    Response response = await post(
+        AppUrl.fetchTodayGoal,
         body: jsonEncode(DailyGoalData),
-        headers: {'Content-Type': 'application/json; charset=UTF-8'});
+        headers: {'Content-Type': 'application/json; charset=UTF-8'}
+    );
 
     print(response.statusCode);
-
-    Map<String, dynamic> responseData = jsonDecode(response.body);
+    Map<String, dynamic> responseJson= jsonDecode(response.body);
     print('1');
-    user = User.fromJson(responseData);
+    if(response.statusCode == 200 && !responseJson['error']){
+      print('if');
+      print("rr@initialize ${responseJson['data']}");
+      var responseData = responseJson['data'];
+      user.basicData = BasicData(
+          age: responseData['age'] ?? 0,
+          weight: responseData['weight'] ?? 0.0,
+          gender: responseData['gender'] ?? '',
+          height: responseData['height'] ?? 0.0,
+          activityFreq: responseData['activityFrequency'] ?? 'Select Activity'
+      );
+      user.healthData = HealthData(
+          BMI: responseData['bmi'] ?? 0.0,
+          idealWeightRange: responseData['weightRange'] ?? [-1,-1]
+      );
+      user.dailyData = DailyData(
+        caloriesToConsume: responseData['caloriesToConsume'] ?? 0,
+        caloriesConsumed:responseData['caloriesConsumed'] ?? 0,
+        // drankWater:responseData['drankWater'] ?? user.dailyData.drankWater
+      );
+      user.workOut = WorkOut(
+          workoutName: responseData['workoutName'] ?? null,
+          caloriesBurnt:responseData['caloriesBurnt'] ?? 0
+      );
+      user.sleep = Sleep(
+          sleepAt: responseData['sleepAt'] ?? DateTime.now(),
+          wokeupAt: responseData['wokeupAt'] ?? DateTime.now()
+      );
+      user.diet = Diet(
+          foodName: responseData['foodName'] ?? '',
+          quantity: responseData['quantity'] ?? 0,
+          caloriesGot: responseData['caloriesGot'] ?? 0
+      );
+      user.waterData = WaterData(
+          current: responseData['drankWater'] ?? 0,
+          target: responseData['waterTarget'] ?? 10
+      );
+      user.goal = Goal(
+          targetWeight: responseData['goalWeight'] ?? 0.0,
+          targetWeightPerWeek: responseData['perWeekWeightGoal'] ?? 0.0
+      );
+      // user = User.fromJson(responseData['data'], token: user.token);
 
-    print("updated to UserProvider");
-    if(responseData['error']==false||response.statusCode!=200)
-      {
-        Fluttertoast.showToast(msg: "Something Went Wrong");
-        return "true";
-      }
-      else
-        {
-          Fluttertoast.showToast(msg: "Loading");
-          return 'false';
-        }
+      print("updated to UserProvider");
+      return 'false';
+    }
+    else if(responseJson['error'] || response.statusCode!=200){
+      Fluttertoast.showToast(msg: "Something Went Wrong @getInitialData()");
+      return "true";
+    }
+    else{
+      Fluttertoast.showToast(msg: "Loading-Error");
+      return 'false';
+    }
     /*update respose data*/
 //    double bmi = double.parse(responseData['data']['bmi']);
 //    d=double.parse(responseData['data']['bmi']);
