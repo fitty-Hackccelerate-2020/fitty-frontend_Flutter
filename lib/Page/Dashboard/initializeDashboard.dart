@@ -58,7 +58,7 @@ class _InitalizeDashboardState extends State<InitalizeDashboard> {
 
   Future GetInitialData() async {
     print('getting');
-    // print(user.token);
+    print(user.token);
     Map<String, dynamic> result;
 
     final Map<String, dynamic> DailyGoalData = {
@@ -75,11 +75,13 @@ class _InitalizeDashboardState extends State<InitalizeDashboard> {
 
     print(response.statusCode);
     Map<String, dynamic> responseJson= jsonDecode(response.body);
-    print('1');
+    print('1' + "${!responseJson['error']}");
+    print(responseJson);
     if(response.statusCode == 200 && !responseJson['error']){
       print('if');
       print("rr@initialize ${responseJson['data']}");
       var responseData = responseJson['data'];
+      print(responseData);
       user.basicData = BasicData(
           age: responseData['age'] ?? 0,
           weight: responseData['weight'] ?? 0.0,
@@ -123,6 +125,8 @@ class _InitalizeDashboardState extends State<InitalizeDashboard> {
       return 'false';
     }
     else if(responseJson['error'] || response.statusCode!=200){
+      print('error @getInitialData()');
+      print(responseJson['error']);
       Fluttertoast.showToast(msg: "Something Went Wrong @getInitialData()");
       return "true";
     }

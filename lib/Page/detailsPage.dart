@@ -515,12 +515,12 @@ class _DetailsPageState extends State<DetailsPage> {
       BasicData basicData = BasicData(
         age: int.parse(_ageController.text),
         weight: double.parse(_weightController.text),
-        height: double.parse(_heightController.text),
+        height: double.parse(_heightController.text)/100,
         activityFreq: activityVal.value,
         gender: _genderselect == 0 ? "M" : "F"
       );
       user.basicData = basicData;
-
+      print(basicData.height);
       HealthData healthData = HealthData(
         BMI: double.parse(responseData['data']['bmi'].toString()),
         idealWeightRange: responseData['data']['weightRange']
