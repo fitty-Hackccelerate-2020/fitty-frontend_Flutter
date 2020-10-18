@@ -53,8 +53,8 @@ class DrinkCard extends StatelessWidget {
       child: Card(
         color: Colors.blue,
         child: Container(
-          width: 150,
-          height: 200,
+          width: width/2.5,
+          height: 250,
           child: InkWell(
             onTap: (){
               Navigator.push(context, MaterialPageRoute(
