@@ -1,9 +1,12 @@
+import 'package:fitty/Page/Dashboard/drinkCard.dart';
+import 'package:fitty/Widgets/gaugeChart.dart';
 import 'package:fitty/models/user.dart';
 import 'package:fitty/services/user_provider.dart';
 import '../../Page/Dashboard/DrinkingDeatils.dart';
 import '../../Page/Profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 import 'CaloriesBurnt.dart';
 import 'ManageSleep.dart';
@@ -187,25 +190,10 @@ class DashBoardPage extends StatelessWidget {
       padding: EdgeInsets.all(10),
       child: Row(
         children: <Widget>[
-          _drinkingCard(context),
+          DrinkCard(isDashBoard: true),
           _sleepingCard(context),
           _workOutCard(context)
         ],
-      ),
-    );
-  }
-
-  _drinkingCard(BuildContext context){
-    return InkWell(
-      onTap: () {
-        DrinkingDetails(context, user.waterData).openEditingSheet();
-      },
-      child: Card(
-        color: Colors.blue[100],
-        child: Container(
-          width: width / 3 - 15,
-          height: 150,
-        ),
       ),
     );
   }
