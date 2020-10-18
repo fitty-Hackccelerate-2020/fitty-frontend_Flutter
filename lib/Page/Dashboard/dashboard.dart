@@ -5,6 +5,9 @@ import '../../Page/Profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'CaloriesBurnt.dart';
+import 'ManageSleep.dart';
+
 class NavigationPage extends StatefulWidget {
   @override
   _NavigationPageState createState() => _NavigationPageState();
@@ -210,31 +213,36 @@ class DashBoardPage extends StatelessWidget {
   _sleepingCard(BuildContext context){
     return Card(
       color: Colors.blueGrey,
-      child: Container(
-        width: width / 3 - 15,
-        height: 150,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: Image.asset('assets/sleep.png',height: 60,width: 60,),
+      child: InkWell(
+        onTap: (){
+          Navigator.of(context).push(new MaterialPageRoute(builder:(context)=>ManageSleep()));
+        },
+        child: Container(
+          width: width / 3 - 15,
+          height: 150,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  child: Image.asset('assets/sleep.png',height: 60,width: 60,),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top:20.0),
-              child: Container(
-                child: Text("Daily Sleep",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 12,color: Colors.white),),
+              Padding(
+                padding: const EdgeInsets.only(top:20.0),
+                child: Container(
+                  child: Text("Daily Sleep",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 12,color: Colors.white),),
 
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: Text("8:30 Hours",style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white),),
-              ),
-            )
-          ],
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  child: Text("${user.sleep.sleepAt}:${user.sleep.wokeupAt} Hours",style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white),),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -243,31 +251,36 @@ class DashBoardPage extends StatelessWidget {
   _workOutCard(BuildContext context){
     return Card(
       color: Colors.red[300],
-      child: Container(
-        width: width / 3 - 15,
-        height: 150,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: Image.asset('assets/workout.png',height: 60,width: 60,),
+      child: InkWell(
+        onTap: (){
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>CaloriesBurnt()));
+        },
+        child: Container(
+          width: width / 3 - 15,
+          height: 150,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  child: Image.asset('assets/workout.png',height: 60,width: 60,),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top:20.0),
-              child: Container(
-                child: Text("Burnt Calories",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 12,color: Colors.white),),
+              Padding(
+                padding: const EdgeInsets.only(top:20.0),
+                child: Container(
+                  child: Text("Burnt Calories",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 12,color: Colors.white),),
 
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: Text("293 Cal",style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white),),
-              ),
-            )
-          ],
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  child: Text("293 Cal",style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white),),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -23,6 +23,7 @@ class InitalizeDashboard extends StatefulWidget {
 class _InitalizeDashboardState extends State<InitalizeDashboard> {
   User user;
   UserProvider userProvider;
+
   @override
   void initState() {
     userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -32,25 +33,21 @@ class _InitalizeDashboardState extends State<InitalizeDashboard> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: FutureBuilder(
         future: GetInitialData(),
         builder: (context, snapshot) {
-          if(snapshot.connectionState==ConnectionState.waiting||snapshot.connectionState==ConnectionState.none)
-            {
-              return Container(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            }
-            else if(snapshot.connectionState == ConnectionState.done)
-              {
-               return NavigationPage();
-              }
-            else
-              return CircularProgressIndicator();
+          if (snapshot.connectionState == ConnectionState.waiting ||
+              snapshot.connectionState == ConnectionState.none) {
+            return Container(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            return NavigationPage();
+          } else
+            return CircularProgressIndicator();
         },
       ),
     );
@@ -62,22 +59,20 @@ class _InitalizeDashboardState extends State<InitalizeDashboard> {
     Map<String, dynamic> result;
 
     final Map<String, dynamic> DailyGoalData = {
-      'token':user.token,
+      'token': user.token,
     };
 
     Fluttertoast.showToast(
         msg: "Please Wait Data is Loading", toastLength: Toast.LENGTH_LONG);
-    Response response = await post(
-        AppUrl.fetchTodayGoal,
+    Response response = await post(AppUrl.fetchTodayGoal,
         body: jsonEncode(DailyGoalData),
-        headers: {'Content-Type': 'application/json; charset=UTF-8'}
-    );
+        headers: {'Content-Type': 'application/json; charset=UTF-8'});
 
     print(response.statusCode);
-    Map<String, dynamic> responseJson= jsonDecode(response.body);
+    Map<String, dynamic> responseJson = jsonDecode(response.body);
     print('1' + "${!responseJson['error']}");
     print(responseJson);
-    if(response.statusCode == 200 && !responseJson['error']){
+    if (response.statusCode == 200 && !responseJson['error']) {
       print('if');
       print("rr@initialize ${responseJson['data']}");
       var responseData = responseJson['data'];
@@ -87,50 +82,43 @@ class _InitalizeDashboardState extends State<InitalizeDashboard> {
           weight: responseData['weight'] ?? 0.0,
           gender: responseData['gender'] ?? '',
           height: responseData['height'] ?? 0.0,
-          activityFreq: responseData['activityFrequency'] ?? 'Select Activity'
-      );
+          activityFreq: responseData['activityFrequency'] ?? 'Select Activity');
       user.healthData = HealthData(
           BMI: responseData['bmi'] ?? 0.0,
-          idealWeightRange: responseData['weightRange'] ?? [-1,-1]
-      );
+          idealWeightRange: responseData['weightRange'] ?? [-1, -1]);
       user.dailyData = DailyData(
         caloriesToConsume: responseData['caloriesToConsume'] ?? 0,
-        caloriesConsumed:responseData['caloriesConsumed'] ?? 0,
+        caloriesConsumed: responseData['caloriesConsumed'] ?? 0,
         // drankWater:responseData['drankWater'] ?? user.dailyData.drankWater
       );
       user.workOut = WorkOut(
           workoutName: responseData['workoutName'] ?? null,
-          caloriesBurnt:responseData['caloriesBurnt'] ?? 0
-      );
+          caloriesBurnt: responseData['caloriesBurnt'] ?? 0);
       user.sleep = Sleep(
-          sleepAt: responseData['sleepAt'] ?? DateTime.now(),
-          wokeupAt: responseData['wokeupAt'] ?? DateTime.now()
-      );
+          sleepAt: responseData['sleepAt'] ?? 0,
+          wokeupAt: responseData['wokeupAt'] ?? 0);
       user.diet = Diet(
           foodName: responseData['foodName'] ?? '',
           quantity: responseData['quantity'] ?? 0,
-          caloriesGot: responseData['caloriesGot'] ?? 0
-      );
+          caloriesGot: responseData['caloriesGot'] ?? 0);
       user.waterData = WaterData(
           current: responseData['drankWater'] ?? 0,
-          target: responseData['waterTarget'] ?? 10
-      );
+          target: responseData['waterTarget'] ?? 10);
       user.goal = Goal(
           targetWeight: responseData['goalWeight'] ?? 0.0,
-          targetWeightPerWeek: responseData['perWeekWeightGoal'] ?? 0.0
-      );
+          targetWeightPerWeek: responseData['perWeekWeightGoal'] ?? 0.0);
       // user = User.fromJson(responseData['data'], token: user.token);
 
       print("updated to UserProvider");
+      print(user.sleep.sleepAt);
+      print(user.sleep.wokeupAt);
       return 'false';
-    }
-    else if(responseJson['error'] || response.statusCode!=200){
+    } else if (responseJson['error'] || response.statusCode != 200) {
       print('error @getInitialData()');
       print(responseJson['error']);
       Fluttertoast.showToast(msg: "Something Went Wrong @getInitialData()");
       return "true";
-    }
-    else{
+    } else {
       Fluttertoast.showToast(msg: "Loading-Error");
       return 'false';
     }
