@@ -515,7 +515,7 @@ class _DetailsPageState extends State<DetailsPage> {
       BasicData basicData = BasicData(
         age: int.parse(_ageController.text),
         weight: double.parse(_weightController.text),
-        height: double.parse(_heightController.text)/100,
+        height: tempheight,
         activityFreq: activityVal.value,
         gender: _genderselect == 0 ? "M" : "F"
       );

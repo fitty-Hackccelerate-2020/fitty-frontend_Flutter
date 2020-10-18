@@ -72,7 +72,7 @@ class DashBoardPage extends StatelessWidget {
     height = MediaQuery.of(context).size.height;
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     user = userProvider.user;
-    // print(user.fullName);
+    print(user.dailyData.caloriesToConsume ?? -1);
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -152,7 +152,7 @@ class DashBoardPage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                        child: Text("${0}/${0}",style: TextStyle(fontSize: 15),),
+                        child: Text("${user.dailyData.caloriesConsumed ?? -1}/${user.dailyData.caloriesToConsume}",style: TextStyle(fontSize: 15),),
                       ),
                     )
 
