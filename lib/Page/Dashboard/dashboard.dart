@@ -209,10 +209,33 @@ class DashBoardPage extends StatelessWidget {
 
   _sleepingCard(BuildContext context){
     return Card(
-      color: Colors.grey[200],
+      color: Colors.blueGrey,
       child: Container(
         width: width / 3 - 15,
         height: 150,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                child: Image.asset('assets/sleep.png',height: 60,width: 60,),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top:20.0),
+              child: Container(
+                child: Text("Daily Sleep",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 12,color: Colors.white),),
+
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                child: Text("8:30 Hours",style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white),),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
