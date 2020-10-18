@@ -93,7 +93,7 @@ class DrinkingDetails extends StatelessWidget{
     return Column(
       children: <Widget>[
         Container(
-          height: 50,
+          // height: 50,
           padding: EdgeInsets.all(20),
           child: Text('Water consumption  a day',
             style: TextStyle(

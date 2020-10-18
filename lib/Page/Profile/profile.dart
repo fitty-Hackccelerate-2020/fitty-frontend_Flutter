@@ -35,8 +35,10 @@ class ProfilePage extends StatelessWidget {
           Image.asset('assets/avatar-man.png', width: 100, height: 100),
           Column(
             children: <Widget>[
-              Container(child: Text('User name')),
-              Container(child: Text('User - since : October-2020'))
+              Container(child: Text('D4Developer', textScaleFactor: 1, style: TextStyle(
+                fontWeight: FontWeight.w600, fontSize: 20
+              ))),
+              // Container(child: Text('User - since : October-2020'))
             ],
           )
         ],
@@ -47,7 +49,7 @@ class ProfilePage extends StatelessWidget {
   _otherDetailsCard(BuildContext context) {
     return Card(
       elevation: 3,
-      color: Colors.blue[50],
+      color: Colors.grey[100],
       child: Container(
         child: Column(
           children: <Widget>[
