@@ -94,8 +94,8 @@ class DrinkingDetails extends StatelessWidget{
       children: <Widget>[
         Container(
           height: 50,
-          padding: EdgeInsets.all(10),
-          child: Text('Water consumption in a day',
+          padding: EdgeInsets.all(20),
+          child: Text('Water consumption  a day',
             style: TextStyle(
               fontSize: 20,
               color: Colors.blue

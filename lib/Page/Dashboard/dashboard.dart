@@ -18,6 +18,7 @@ class NavigationPage extends StatefulWidget {
 
 class _NavigationPageState extends State<NavigationPage> {
   var width, height, index = 0;
+  User user;
 
   List<Widget> _navList = [
     DashBoardPage(),
@@ -25,6 +26,12 @@ class _NavigationPageState extends State<NavigationPage> {
     ProfilePage()
   ];
 
+  @override
+  void initState() {
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    user = userProvider.user;
+    super.initState();
+  }
   void _onItemTapped(int i) {
     setState(() {
       index = i;
@@ -41,6 +48,15 @@ class _NavigationPageState extends State<NavigationPage> {
       },
       child: SafeArea(
         child: Scaffold(
+          backgroundColor: Colors.blue[100],
+          appBar: AppBar(
+            backgroundColor: Colors.blue[100],
+            centerTitle: false,
+            title: Text("Fitty", style:
+              TextStyle(fontSize: 20, color: Colors.blue[900]),
+              textScaleFactor: 1,
+            )
+          ),
           body: _navList.elementAt(index),
           bottomNavigationBar: BottomNavigationBar(
             items: [
@@ -78,7 +94,7 @@ class DashBoardPage extends StatelessWidget {
     height = MediaQuery.of(context).size.height;
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     user = userProvider.user;
-    print(user.dailyData.caloriesToConsume ?? -1);
+    // print(user.dailyData.caloriesToConsume ?? -1);
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -90,26 +106,7 @@ class DashBoardPage extends StatelessWidget {
   }
 
   _greetingSection(context){
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      height: height / 8,
-      width: width,
-      color: Colors.redAccent,
-      child: Column(
-        children: <Widget>[
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Image.asset('assets/avatar-man.png'),
-              Text("Hello, ${user.fullName}", style: TextStyle(fontSize: 20)),
-//              Icon(Icons.pie_chart)
-            _rewardsButton(context)
-            ],
-          )
-        ],
-      ),
-    );
+    return Container();
   }
 
   _mainInfo(BuildContext context){
@@ -119,7 +116,7 @@ class DashBoardPage extends StatelessWidget {
       // height: height - height / 8,
       child: Column(
         children: <Widget>[
-          _eatCard(),
+          _eatCard(context),
           _groupCard(context),
           _weekAnalyse(),
         ],
@@ -127,7 +124,27 @@ class DashBoardPage extends StatelessWidget {
     );
   }
 
-  _eatCard() {
+  List<charts.Series<GaugeSegment, String>> _createGuageData(BuildContext context, double percentage) {
+
+    final data = [
+      new GaugeSegment('Low', percentage),
+      // new GaugeSegment('high', .2),
+    ];
+
+    return [
+      new charts.Series<GaugeSegment, String>(
+        id: 'Segments',
+        domainFn: (GaugeSegment segment, _) => segment.segment,
+        measureFn: (GaugeSegment segment, _) => segment.size,
+        colorFn: (GaugeSegment segment, _) => segment.color,
+        data: data,
+      )
+    ];
+  }
+
+  _eatCard(BuildContext context) {
+    double percentage = user.dailyData.caloriesConsumed/user.dailyData.caloriesToConsume * 100;
+    List<charts.Series> seriesList = _createGuageData(context, percentage + 10);
     return Container(
       padding: EdgeInsets.all(10),
       child: Card(
@@ -174,7 +191,8 @@ class DashBoardPage extends StatelessWidget {
                 width: width / 2 - 15,
                 child: Column(
                   children: <Widget>[
-
+                    GuageChartWidget(seriesList, percentage + 10, 60,
+                        height: height/4, fontSize: 20, stroke: 6.0, arcLength: 10)
                   ],
                 ),
               )
@@ -207,7 +225,7 @@ class DashBoardPage extends StatelessWidget {
         },
         child: Container(
           width: width / 3 - 15,
-          height: 150,
+          height: 170,
           child: Column(
             children: [
               Padding(
@@ -245,7 +263,7 @@ class DashBoardPage extends StatelessWidget {
         },
         child: Container(
           width: width / 3 - 15,
-          height: 150,
+          height: 170,
           child: Column(
             children: [
               Padding(

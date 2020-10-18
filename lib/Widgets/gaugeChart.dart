@@ -36,34 +36,48 @@ class GuageChartWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     print(percentage);
     return Container(
+      width: MediaQuery.of(context).size.width,
       height: height,
       // color: Colors.pinkAccent,
-      child: InkWell(
-        onTap: (){
-          Navigator.push(context, MaterialPageRoute(
-              builder: (context) => DrinkingDetails(context, seriesList)));
-        },
-        child: Center(
-            child: Stack(
-              children: <Widget>[
-                Center(
-                    child: CustomPaint(painter: DrawCircle(radius, stroke))
-                ),
-                Hero(
-                  tag: 'waterCard',
-                  child: GaugeChart(seriesList , percentage, arcLength)
-                ),
-                Center(
-                  child: Text('${percentage.toStringAsFixed(2)} %', style: TextStyle(
-                    color: Colors.blue[900],
-                    fontSize: double.parse(fontSize.toString()),
+      child: Center(
+          child: Stack(
+            alignment: Alignment.bottomCenter,
+            children: <Widget>[
+              if(height == 200)
+                Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  IconButton(
+                    onPressed: (){
+
+                    },
+                    icon: Icon(Icons.remove, color: Colors.red),
                   ),
-                    textAlign: TextAlign.center,
+                  IconButton(
+                    onPressed: (){
+
+                    },
+                    icon: Icon(Icons.add, color: Colors.green),
                   ),
-                )
-              ],
-            )
-        ),
+                ],
+              ),
+              Center(
+                  child: CustomPaint(painter: DrawCircle(radius, stroke))
+              ),
+              Hero(
+                tag: 'waterCard',
+                child: GaugeChart(seriesList , percentage, arcLength)
+              ),
+              Center(
+                child: Text('${percentage.toStringAsFixed(2)} %', style: TextStyle(
+                  color: Colors.blue[900],
+                  fontSize: double.parse(fontSize.toString()),
+                ),
+                  textAlign: TextAlign.center,
+                ),
+              )
+            ],
+          )
       ),
     );
   }
