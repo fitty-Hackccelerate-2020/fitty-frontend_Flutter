@@ -270,7 +270,7 @@ class _DetailsPageState extends State<DetailsPage> {
                   child: ListTile(
                     leading: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Image.asset("assets/weight.png"),
+                      child: Image.asset("assets/wheight.png"),
                     ),
                     title: TextFormField(
                       controller: _weightController,
@@ -532,7 +532,7 @@ class _DetailsPageState extends State<DetailsPage> {
       // user.healthData.idealWeightRange = responseData['data']['weightRange'];
       user.workOut = WorkOut();
       user.waterData = WaterData();
-      user.sleep = Sleep();
+      user.sleep = Sleep(wokeupAt: 0, sleepAt: 0);
       user.diet = Diet();
       // user = User.fromJson(responseData['data'], token: user.token, preUser: user);
 

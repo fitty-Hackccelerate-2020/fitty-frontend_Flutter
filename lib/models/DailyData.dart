@@ -21,8 +21,8 @@ class Diet {
 
 class Sleep
 {
-  DateTime sleepAt = DateTime.now();
-  DateTime wokeupAt=DateTime.now();
+  int sleepAt = 0 ;
+  int wokeupAt = 0;
 
   Sleep({this.sleepAt,this.wokeupAt});
 
