@@ -108,6 +108,7 @@ class _InitalizeDashboardState extends State<InitalizeDashboard> {
           targetWeight: responseData['goalWeight'] ?? 0.0,
           targetWeightPerWeek: responseData['perWeekWeightGoal'] ?? 0.0);
       // user = User.fromJson(responseData['data'], token: user.token);
+      user.ListofDiet = List<Diet>();
 
       print("updated to UserProvider");
       print(user.sleep.sleepAt);

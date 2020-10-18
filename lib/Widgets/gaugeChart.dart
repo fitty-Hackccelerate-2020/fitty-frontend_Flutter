@@ -64,10 +64,7 @@ class GuageChartWidget extends StatelessWidget {
               Center(
                   child: CustomPaint(painter: DrawCircle(radius, stroke))
               ),
-              Hero(
-                tag: 'waterCard',
-                child: GaugeChart(seriesList , percentage, arcLength)
-              ),
+              GaugeChart(seriesList , percentage, arcLength),
               Center(
                 child: Text('${percentage.toStringAsFixed(2)} %', style: TextStyle(
                   color: Colors.blue[900],

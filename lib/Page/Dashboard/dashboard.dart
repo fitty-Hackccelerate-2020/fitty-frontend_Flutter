@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 import 'CaloriesBurnt.dart';
+import 'CaloriesCount.dart';
 import 'ManageSleep.dart';
 
 class NavigationPage extends StatefulWidget {
@@ -22,7 +23,7 @@ class _NavigationPageState extends State<NavigationPage> {
 
   List<Widget> _navList = [
     DashBoardPage(),
-    Text("History Page"),
+//    Text("History Page"),
     ProfilePage()
   ];
 
@@ -64,10 +65,10 @@ class _NavigationPageState extends State<NavigationPage> {
                 icon: Image.asset('assets/nav/home.png',height: 22,width: 22,),
                 title: Text('Home')
               ),
-              BottomNavigationBarItem(
-                icon: Image.asset('assets/nav/history.png',height: 22,width: 22,),
-                title: Text('History')
-              ),
+//              BottomNavigationBarItem(
+//                icon: Image.asset('assets/nav/history.png',height: 22,width: 22,),
+//                title: Text('History')
+//              ),
               BottomNavigationBarItem(
                 icon: Image.asset('assets/nav/profile.png',height: 22,width: 22,),
                 title: Text('Profile')
@@ -118,7 +119,7 @@ class DashBoardPage extends StatelessWidget {
         children: <Widget>[
           _eatCard(context),
           _groupCard(context),
-          _weekAnalyse(),
+//          _weekAnalyse(),
         ],
       ),
     );
@@ -145,58 +146,66 @@ class DashBoardPage extends StatelessWidget {
   _eatCard(BuildContext context) {
     double percentage = user.dailyData.caloriesConsumed/user.dailyData.caloriesToConsume * 100;
     List<charts.Series> seriesList = _createGuageData(context, percentage + 10);
+   print("height");
+    print(height/4);
     return Container(
       padding: EdgeInsets.all(10),
       child: Card(
         // color: Colors.blue,
-        child: Container(
-          // margin: EdgeInsets.all(10),
-          // color: Colors.pinkAccent,
-          // padding: EdgeInsets.all(20),
-          height: height / 4,
-          child: Row(
-            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            // crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                width: width / 2 - 15,
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      child: Image.asset('assets/cal.png',height: 80,width: 80,),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: Container(
-                        child: Text
-                          ("Daily Calories",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),)
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        child: Text("${user.dailyData.caloriesConsumed ?? -1}/${user.dailyData.caloriesToConsume}",style: TextStyle(fontSize: 15),),
-                      ),
-                    )
+        child: InkWell(
+          onTap: (){
 
-                  ],
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context)=>CaloriesCount()));
+          },
+          child: Container(
+            // margin: EdgeInsets.all(10),
+            // color: Colors.pinkAccent,
+            // padding: EdgeInsets.all(20),
+            height: height / 4,
+            child: Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: width / 2 - 15,
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        child: Image.asset('assets/cal.png',height: 80,width: 80,),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Container(
+                          child: Text
+                            ("Daily Calories",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),)
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          child: Text("${user.dailyData.caloriesConsumed ?? -1}/${user.dailyData.caloriesToConsume}",style: TextStyle(fontSize: 15),),
+                        ),
+                      )
+
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                color: Colors.grey,
-                width: 2,
-                height: height/4 - 30,
-              ),
-              Container(
-                width: width / 2 - 15,
-                child: Column(
-                  children: <Widget>[
-                    GuageChartWidget(seriesList, percentage + 10, 60,
-                        height: height/4, fontSize: 20, stroke: 6.0, arcLength: 10)
-                  ],
+                Container(
+                  color: Colors.grey,
+                  width: 2,
+                  height: height/4 - 30,
                 ),
-              )
-            ],
+                Container(
+                  width: width / 2 - 15,
+                  child: Column(
+                    children: <Widget>[
+                      GuageChartWidget(seriesList, percentage + 10, 60,
+                          height: height/4, fontSize: 20, stroke: 6.0, arcLength: 10)
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -282,7 +291,7 @@ class DashBoardPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  child: Text("293 Cal",style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white),),
+                  child: Text("${user.workOut.caloriesBurnt} Cal",style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white),),
                 ),
               )
             ],
