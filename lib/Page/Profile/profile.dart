@@ -18,6 +18,7 @@ class ProfilePage extends StatelessWidget {
     userProvider = Provider.of<UserProvider>(context, listen: false);
     user = userProvider.user;
     return Scaffold(
+
         body: Container(
       padding: EdgeInsets.all(5),
       child: SingleChildScrollView(

@@ -8,6 +8,7 @@ import 'package:fitty/models/healthDataModel.dart';
 import 'package:fitty/models/waterModel.dart';
 import 'package:fitty/services/user_provider.dart';
 import 'package:fitty/utils/AppUrl.dart';
+import 'package:fitty/utils/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:fitty/models/user.dart';
 import 'package:http/http.dart';
@@ -73,27 +74,6 @@ class _DetailsPageState extends State<DetailsPage> {
             fontSize: 22,
           ),
         ),
-        actions: [
-          Center(
-              child: InkWell(
-                  onTap: () {
-//                    User user;
-//                    print(user.token);
-                    //Done Button
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: InkWell(
-                      child: Text(
-                        "Done",
-                        style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  )))
-        ],
       ),
       body: GetGenralInfoData(context, _formkey),
     );
@@ -312,9 +292,9 @@ class _DetailsPageState extends State<DetailsPage> {
                         msg:
                         "Please Update Data and Select Your Activity Level");
                   } else {
+                    loading(context, title: 'Calculating your BMI (Body Mass Index)...');
                     UpdateDetails(context);
                   }
-
                   //                  Navigator.of(context).push(MaterialPageRoute(builder:(context)=>SetGoal()));
                 },
                 child: Container(
@@ -538,10 +518,12 @@ class _DetailsPageState extends State<DetailsPage> {
 
       print('updated BMI,Ideal weight range');
       if(widget.flagvar==false){
+        Navigator.of(context).pop();
         Navigator.of(context)
             .pushReplacement(MaterialPageRoute(builder: (context) => SetGoal(flagvar: false,)));
       }
       else{
+        Navigator.of(context).pop();
         Navigator.of(context).pop();
       }
     }
