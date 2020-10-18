@@ -12,6 +12,7 @@ class User{
   WaterData waterData;
   DailyData dailyData;
   Diet diet;
+  List<Diet> ListofDiet;
   Sleep sleep;
   WorkOut workOut;
   Goal goal;
