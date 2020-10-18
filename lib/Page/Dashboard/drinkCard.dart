@@ -53,8 +53,8 @@ class DrinkCard extends StatelessWidget {
       child: Card(
         color: Colors.blue,
         child: Container(
-          width: width / 3 - 15,
-          height: 170,
+          width: 150,
+          height: 200,
           child: InkWell(
             onTap: (){
               Navigator.push(context, MaterialPageRoute(
@@ -64,8 +64,8 @@ class DrinkCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.only(top: 10),
-                  child: Text("Water consumption"),
+                  padding: EdgeInsets.only(top: 5),
+                  child: Text("Water drank", textScaleFactor: 1),
                 ),
                 Stack(
                   alignment: Alignment.topCenter,

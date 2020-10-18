@@ -50,6 +50,7 @@ class _NavigationPageState extends State<NavigationPage> {
         child: Scaffold(
           backgroundColor: Colors.blue[100],
           appBar: AppBar(
+            automaticallyImplyLeading: false,
             backgroundColor: Colors.blue[100],
             centerTitle: false,
             title: Text("Fitty", style:
@@ -153,7 +154,7 @@ class DashBoardPage extends StatelessWidget {
           // margin: EdgeInsets.all(10),
           // color: Colors.pinkAccent,
           // padding: EdgeInsets.all(20),
-          height: height / 4,
+          height: 200,
           child: Row(
             // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             // crossAxisAlignment: CrossAxisAlignment.center,
@@ -161,6 +162,7 @@ class DashBoardPage extends StatelessWidget {
               Container(
                 width: width / 2 - 15,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
                       child: Image.asset('assets/cal.png',height: 80,width: 80,),
@@ -169,7 +171,10 @@ class DashBoardPage extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 20),
                       child: Container(
                         child: Text
-                          ("Daily Calories",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),)
+                          ("Daily Calories",style: TextStyle(
+                            fontSize: 15,fontWeight: FontWeight.w600),
+                            textScaleFactor: 1,
+                        )
                       ),
                     ),
                     Padding(
@@ -185,14 +190,14 @@ class DashBoardPage extends StatelessWidget {
               Container(
                 color: Colors.grey,
                 width: 2,
-                height: height/4 - 30,
+                height: 140,
               ),
               Container(
                 width: width / 2 - 15,
                 child: Column(
                   children: <Widget>[
                     GuageChartWidget(seriesList, percentage + 10, 60,
-                        height: height/4, fontSize: 20, stroke: 6.0, arcLength: 10)
+                        height: 170, fontSize: 20, stroke: 6.0, arcLength: 10)
                   ],
                 ),
               )
@@ -209,8 +214,12 @@ class DashBoardPage extends StatelessWidget {
       child: Row(
         children: <Widget>[
           DrinkCard(isDashBoard: true),
-          _sleepingCard(context),
-          _workOutCard(context)
+          Wrap(
+            children: <Widget>[
+              _sleepingCard(context),
+              _workOutCard(context)
+            ],
+          )
         ],
       ),
     );
